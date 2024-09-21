@@ -44,6 +44,14 @@ public class StackTest {
         assertEquals("AB*CD+-E+", infixToPostfix("A*B-(C+D)+E"));
     }
 
+    // 4.8.4
+    // Evaluate postfix expression
+    @Test
+    public void evaluatePostfixExpression() {
+        assertEquals(14, evaluatePostfix("234*+"));
+        assertEquals(2, evaluatePostfix("123*+5-"));
+    }
+
     private void testStackAdt(Stack<Integer> stack) {
         for (int i = 1; i <= 4; i++) {
             stack.push(i);
@@ -126,5 +134,28 @@ public class StackTest {
         }
 
         return postfix.toString();
+    }
+
+    private int evaluatePostfix(String postfix) {
+        Stack<Integer> stack = new LinkedListBasedStack<>(postfix.length());
+        for (int i = 0; i < postfix.length(); i++) {
+            char c = postfix.charAt(i);
+            if (Character.isDigit(c)) {
+                stack.push(Integer.parseInt(Character.toString(c)));
+            } else if (c == '+') {
+                stack.push(stack.pop() + stack.pop());
+            } else if (c == '-') {
+                Integer operand1 = stack.pop();
+                Integer operand2 = stack.pop();
+                stack.push(operand2 - operand1);
+            } else if (c == '*') {
+                stack.push(stack.pop() * stack.pop());
+            } else if (c == '/') {
+                Integer operand1 = stack.pop();
+                Integer operand2 = stack.pop();
+                stack.push(operand2 / operand1);
+            }
+        }
+        return stack.pop();
     }
 }
