@@ -21,9 +21,17 @@ public abstract class AbstractStack<E extends Comparable<E>> implements Stack<E>
         return doPop();
     }
 
+    @Override
+    public E peek() {
+        checkLowerBound();
+        return doPeek();
+    }
+
     protected abstract void doPush(E value);
 
     protected abstract E doPop();
+
+    protected abstract E doPeek();
 
     private void checkUpperBound() {
         if (size() == capacity) {

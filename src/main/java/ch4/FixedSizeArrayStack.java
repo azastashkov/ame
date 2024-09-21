@@ -26,4 +26,9 @@ public class FixedSizeArrayStack<E extends Comparable<E>> extends AbstractStack<
         array[--top] = null;
         return value;
     }
+
+    @Override
+    protected E doPeek() {
+        return array[top - 1];
+    }
 }

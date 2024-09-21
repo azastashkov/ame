@@ -35,20 +35,13 @@ public class StackTest {
         assertTrue(isParenthesesBalanced("((A+(B+C))-D)"));
     }
 
-    private boolean isParenthesesBalanced(String expression) {
-        Stack<Character> stack = new LinkedListBasedStack<>(expression.length());
-        for (int i = 0; i < expression.length(); i++) {
-            char c = expression.charAt(i);
-            if (c == '(') {
-                stack.push(c);
-            } else if (c == ')') {
-                Character top = stack.pop();
-                if (top != '(') {
-                    return false;
-                }
-            }
-        }
-        return stack.isEmpty();
+    // 4.8.2
+    // Convert an infix string to a postfix one
+    @Test
+    public void convertInfixToPostfix() {
+        assertEquals("234*+", infixToPostfix("2+3*4"));
+        assertEquals("ABC*+D+", infixToPostfix("A+B*C+D"));
+        assertEquals("AB*CD+-E+", infixToPostfix("A*B-(C+D)+E"));
     }
 
     private void testStackAdt(Stack<Integer> stack) {
@@ -71,5 +64,67 @@ public class StackTest {
                 stack.push(i);
             }
         });
+    }
+
+    private boolean isParenthesesBalanced(String expression) {
+        Stack<Character> stack = new LinkedListBasedStack<>(expression.length());
+        for (int i = 0; i < expression.length(); i++) {
+            char c = expression.charAt(i);
+            if (c == '(') {
+                stack.push(c);
+            } else if (c == ')') {
+                Character top = stack.pop();
+                if (top != '(') {
+                    return false;
+                }
+            }
+        }
+        return stack.isEmpty();
+    }
+
+    private int precedence(char c) {
+        switch (c) {
+            case '*':
+            case '/':
+                return 2;
+
+            case '+':
+            case '-':
+                return 1;
+
+            default:
+                return 0;
+        }
+    }
+
+    private String infixToPostfix(String infix) {
+        StringBuilder postfix = new StringBuilder();
+        Stack<Character> stack = new LinkedListBasedStack<>(infix.length());
+
+        for (int i = 0; i < infix.length(); i++) {
+            char c = infix.charAt(i);
+
+            if (Character.isAlphabetic(c) || Character.isDigit(c)) {
+                postfix.append(c);
+            } else if (c == '(') {
+                stack.push(c);
+            } else if (c == ')') {
+                while (!stack.isEmpty() && stack.peek() != '(') {
+                    postfix.append(stack.pop());
+                }
+                stack.pop(); // '('
+            } else { // operator
+                while (!stack.isEmpty() && precedence(c) <= precedence(stack.peek())) {
+                    postfix.append(stack.pop());
+                }
+                stack.push(c);
+            }
+        }
+
+        while (!stack.isEmpty()) {
+            postfix.append(stack.pop());
+        }
+
+        return postfix.toString();
     }
 }

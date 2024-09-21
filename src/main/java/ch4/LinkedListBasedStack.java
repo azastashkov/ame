@@ -22,4 +22,9 @@ public class LinkedListBasedStack<E extends Comparable<E>> extends AbstractStack
     protected E doPop() {
         return list.removeFirst();
     }
+
+    @Override
+    protected E doPeek() {
+        return list.get(0);
+    }
 }
