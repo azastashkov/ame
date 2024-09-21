@@ -1,1 +1,1 @@
-# ame
+# All problems in the project are from the corresponding chapters of Narasimha Karumanchi's book: "Data Structures and Algorithms Made Easy in Java"
