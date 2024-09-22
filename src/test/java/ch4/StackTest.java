@@ -1,5 +1,6 @@
 package ch4;
 
+import ch3.LinkedList;
 import org.junit.Test;
 
 import java.util.EmptyStackException;
@@ -50,6 +51,16 @@ public class StackTest {
     public void evaluatePostfixExpression() {
         assertEquals(14, evaluatePostfix("234*+"));
         assertEquals(2, evaluatePostfix("123*+5-"));
+    }
+
+    // 4.8.9
+    // Check whether elements of a linked list formed from a string's characters is a palindrome
+    @Test
+    public void checkWhetherLinkedListFormedFromStringCharactersIsPalindrome() {
+        assertTrue(isPalindrome("tenet"));
+        assertTrue(isPalindrome("hannah"));
+        assertTrue(isPalindrome("nun"));
+        assertTrue(isPalindrome("noon"));
     }
 
     private void testStackAdt(Stack<Integer> stack) {
@@ -193,5 +204,27 @@ public class StackTest {
         }
 
         return operands.pop();
+    }
+
+    private boolean isPalindrome(String s) {
+        LinkedList<Character> list = new LinkedList<>();
+        for (int i = 0; i < s.length(); i++) {
+            list.add(s.charAt(i));
+        }
+
+        int remainder = s.length() % 2;
+        int mid = s.length() / 2 + remainder;
+        Stack<Character> stack = new LinkedListBasedStack<>(mid);
+        for (int i = 0; i < mid - remainder; i++) {
+            stack.push(s.charAt(i));
+        }
+
+        for (int i = mid; i < s.length(); i++) {
+            if (list.get(i) != stack.pop()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
