@@ -3,6 +3,7 @@ package ch4;
 import ch3.LinkedList;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.EmptyStackException;
 
 import static org.junit.Assert.assertArrayEquals;
@@ -99,6 +100,15 @@ public class StackTest {
         int[] spans = findSpans(array);
 
         assertArrayEquals(new int[] { 1, 1, 2, 3, 1}, spans);
+    }
+
+    // 4.8.24
+    // Find the largest rectangle area under histogram
+    @Test
+    public void findLargestRectangleAreaUnderHistogram() {
+        int[] histogram = { 6, 2, 5, 4, 5, 1, 6 };
+
+        assertEquals(12, findLargestAreaRectangle(histogram));
     }
 
     private void testStackAdt(Stack<Integer> stack) {
@@ -306,5 +316,53 @@ public class StackTest {
         }
 
         return spans;
+    }
+
+    private int[] nextSmaller(int[] histogram) {
+        int n = histogram.length;
+        int[] nextSmaller = new int[n];
+
+        Arrays.fill(nextSmaller, -1);
+
+        Stack<Integer> stack = new LinkedListBasedStack<>(n);
+        for (int i = 0; i < n; i++) {
+            while (!stack.isEmpty() && histogram[i] < histogram[stack.peek()]) {
+                nextSmaller[stack.pop()] = i;
+            }
+            stack.push(i);
+        }
+
+        return nextSmaller;
+    }
+
+    private int[] previousSmaller(int[] histogram) {
+        int n = histogram.length;
+        int[] previousSmaller = new int[n];
+
+        Arrays.fill(previousSmaller, -1);
+
+        Stack<Integer> stack = new LinkedListBasedStack<>(n);
+        for (int i = n - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && histogram[i] < histogram[stack.peek()]) {
+                previousSmaller[stack.pop()] = i;
+            }
+            stack.push(i);
+        }
+
+        return previousSmaller;
+    }
+
+    private int findLargestAreaRectangle(int[] histogram) {
+        int[] nextSmaller = nextSmaller(histogram);
+        int[] previousSmaller = previousSmaller(histogram);
+
+        int maxArea = 0;
+        for (int i = 0; i < histogram.length; i++) {
+            int width = nextSmaller[i] - previousSmaller[i] - 1;
+            int area = histogram[i] * width;
+            maxArea = Math.max(maxArea, area);
+        }
+
+        return maxArea;
     }
 }
