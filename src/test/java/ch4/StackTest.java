@@ -111,6 +111,25 @@ public class StackTest {
         assertEquals(12, findLargestAreaRectangle(histogram));
     }
 
+    // 4.8.26
+    // Sort a stack in ascending order
+    @Test
+    public void sortStackInAscendingOrder() {
+        int capacity = 5;
+        Stack<Integer> stack = new LinkedListBasedStack<>(capacity);
+        stack.push(4);
+        stack.push(2);
+        stack.push(3);
+        stack.push(1);
+        stack.push(5);
+
+        Stack<Integer> ascending = sortAscending(stack);
+
+        for (int i = 1; i <= capacity; i++) {
+            assertEquals(i, (int) ascending.pop());
+        }
+    }
+
     private void testStackAdt(Stack<Integer> stack) {
         for (int i = 1; i <= 4; i++) {
             stack.push(i);
@@ -364,5 +383,17 @@ public class StackTest {
         }
 
         return maxArea;
+    }
+
+    private Stack<Integer> sortAscending(Stack<Integer> input) {
+        Stack<Integer> ascending = new LinkedListBasedStack<>(input.size());
+        while (!input.isEmpty()) {
+            Integer tmp = input.pop();
+            while (!ascending.isEmpty() && tmp > ascending.peek()) {
+                input.push(ascending.pop());
+            }
+            ascending.push(tmp);
+        }
+        return ascending;
     }
 }
