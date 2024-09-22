@@ -46,11 +46,19 @@ public class StackTest {
     }
 
     // 4.8.4
-    // Evaluate postfix expression
+    // Evaluate a postfix expression
     @Test
     public void evaluatePostfixExpression() {
         assertEquals(14, evaluatePostfix("234*+"));
         assertEquals(2, evaluatePostfix("123*+5-"));
+    }
+
+    // 4.8.5
+    // Evaluate an infix expression
+    @Test
+    public void evaluateInfixExpression() {
+        assertEquals(14, evaluateInfix("2+3*4"));
+        assertEquals(2, evaluateInfix("1+2*3-5"));
     }
 
     // 4.8.9
@@ -200,7 +208,7 @@ public class StackTest {
         }
 
         while (!operators.isEmpty()) {
-            evaluate(operators.pop(), operands.pop(), operands.pop());
+            operands.push(evaluate(operators.pop(), operands.pop(), operands.pop()));
         }
 
         return operands.pop();
