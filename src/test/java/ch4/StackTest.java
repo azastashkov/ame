@@ -136,26 +136,62 @@ public class StackTest {
         return postfix.toString();
     }
 
+    private int evaluate(char operator, Integer operand1, Integer operand2) {
+        switch (operator) {
+            case '+':
+                return operand1 + operand2;
+
+            case '-':
+                return operand2 - operand1;
+
+            case '*':
+                return operand1 * operand2;
+
+            case '/':
+                return operand2 / operand1;
+        }
+        throw new IllegalArgumentException("Invalid operator: " + operator);
+    }
+
     private int evaluatePostfix(String postfix) {
         Stack<Integer> stack = new LinkedListBasedStack<>(postfix.length());
         for (int i = 0; i < postfix.length(); i++) {
             char c = postfix.charAt(i);
             if (Character.isDigit(c)) {
                 stack.push(Integer.parseInt(Character.toString(c)));
-            } else if (c == '+') {
-                stack.push(stack.pop() + stack.pop());
-            } else if (c == '-') {
-                Integer operand1 = stack.pop();
-                Integer operand2 = stack.pop();
-                stack.push(operand2 - operand1);
-            } else if (c == '*') {
-                stack.push(stack.pop() * stack.pop());
-            } else if (c == '/') {
-                Integer operand1 = stack.pop();
-                Integer operand2 = stack.pop();
-                stack.push(operand2 / operand1);
+            } else if (c == '+' || c == '-' || c == '*' || c == '/') {
+                stack.push(evaluate(c, stack.pop(), stack.pop()));
             }
         }
         return stack.pop();
+    }
+
+    private int evaluateInfix(String infix) {
+        Stack<Integer> operands = new LinkedListBasedStack<>(infix.length());
+        Stack<Character> operators = new LinkedListBasedStack<>(infix.length());
+        for (int i = 0; i < infix.length(); i++) {
+            char c = infix.charAt(i);
+            if (Character.isDigit(c)) {
+                operands.push(Integer.parseInt(Character.toString(c)));
+            } else if (c == '(') {
+                operators.push(c);
+            } else if (c == ')') {
+                while (!operators.isEmpty() && operators.peek() != '(') {
+                    operands.push(evaluate(operators.pop(), operands.pop(), operands.pop()));
+                }
+                operators.pop();
+            } else {
+                while (!operators.isEmpty() && precedence(c) <= precedence(operators.peek())) {
+                    operands.push(evaluate(operators.pop(), operands.pop(), operands.pop()));
+                }
+                operators.push(c);
+            }
+        }
+
+        while (!operators.isEmpty()) {
+            evaluate(operators.pop(), operands.pop(), operands.pop());
+        }
+
+        return operands.pop();
     }
 }
