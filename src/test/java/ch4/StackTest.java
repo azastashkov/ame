@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.util.EmptyStackException;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThrows;
@@ -86,6 +87,18 @@ public class StackTest {
         for (int i = 0; i < capacity; i++) {
             assertEquals(i, (int) stack.pop());
         }
+    }
+
+    // 4.8.23
+    // For a given array A, the span S[i] of A[i] is the maximum number of consecutive elements A[j]
+    // immediately preceding A[i] and such that A[j] <= A[j+1]
+    @Test
+    public void findSpans() {
+        int[] array = { 6, 3, 4, 5, 2 };
+
+        int[] spans = findSpans(array);
+
+        assertArrayEquals(new int[] { 1, 1, 2, 3, 1}, spans);
     }
 
     private void testStackAdt(Stack<Integer> stack) {
@@ -272,5 +285,26 @@ public class StackTest {
         T tmp = stack.pop();
         insertAtBottom(stack, data);
         stack.push(tmp);
+    }
+
+    private int[] findSpans(int[] array) {
+        Stack<Integer> stack = new LinkedListBasedStack<>(array.length);
+        int[] spans = new int[array.length];
+
+        for (int i = 0; i < array.length; i++) {
+            while (!stack.isEmpty() && array[stack.peek()] <= array[i]) {
+                stack.pop();
+            }
+
+            int p = -1;
+            if (!stack.isEmpty()) {
+                p = stack.peek();
+            }
+
+            spans[i] = i - p;
+            stack.push(i);
+        }
+
+        return spans;
     }
 }
