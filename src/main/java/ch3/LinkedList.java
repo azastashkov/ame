@@ -237,9 +237,7 @@ public class LinkedList<E extends Comparable<E>> {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("[");
-        if (head == null) {
-            sb.append("null");
-        } else {
+        if (head != null) {
             Node<E> node = head;
             while (node != null) {
                 sb.append(node.element).append(", ");

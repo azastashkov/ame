@@ -71,6 +71,23 @@ public class StackTest {
         assertTrue(isPalindrome("noon"));
     }
 
+    // 4.8.11
+    // Given a stack, reverse its contents using only stack operations (push and pop)
+    @Test
+    public void reverseStackUsingOnlyPushAndPop() {
+        int capacity = 5;
+        Stack<Integer> stack = new LinkedListBasedStack<>(capacity);
+        for (int i = 0; i < capacity; i++) {
+            stack.push(i);
+        }
+
+        reverse(stack);
+
+        for (int i = 0; i < capacity; i++) {
+            assertEquals(i, (int) stack.pop());
+        }
+    }
+
     private void testStackAdt(Stack<Integer> stack) {
         for (int i = 1; i <= 4; i++) {
             stack.push(i);
@@ -234,5 +251,26 @@ public class StackTest {
         }
 
         return true;
+    }
+
+    private <T extends Comparable<T>> void reverse(Stack<T> stack) {
+        if (stack.isEmpty()) {
+            return;
+        }
+
+        T tmp = stack.pop();
+        reverse(stack);
+        insertAtBottom(stack, tmp);
+    }
+
+    private <T extends Comparable<T>> void  insertAtBottom(Stack<T> stack, T data) {
+        if (stack.isEmpty()) {
+            stack.push(data);
+            return;
+        }
+
+        T tmp = stack.pop();
+        insertAtBottom(stack, data);
+        stack.push(tmp);
     }
 }
