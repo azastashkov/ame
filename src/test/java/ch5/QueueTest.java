@@ -1,5 +1,6 @@
 package ch5;
 
+import ch4.FixedSizeArrayStack;
 import ch4.LinkedListBasedStack;
 import ch4.Stack;
 import org.junit.Test;
@@ -49,6 +50,37 @@ public class QueueTest {
     @Test
     public void testTwoStacksBasedQueue() {
         testQueueAdt(new LinkedListBasedQueue<>(4));
+    }
+
+    // 5.7.5
+    // Given a queue Q containing n elements, transfer these items on to a stack S (initially empty) so that
+    // front element of Q appears at the top of the stack and the order of all other items is preserved.
+    // Using enqueue and dequeue operations for the queue, and push and pop operations for the stack, outline
+    // an efficient O(n) algorithm to accomplish the task using only a constant amount of additional storage.
+    @Test
+    public void transferQueueItemsOnStackPreservingOrder() {
+        int capacity = 5;
+        Queue<Integer> queue = new FixedSizeCircularArrayQueue<>(capacity);
+        for (int i = 1; i <= capacity; i++) {
+            queue.enqueue(i);
+        }
+
+        Stack<Integer> stack = new FixedSizeArrayStack<>(capacity);
+        for (int i = 1; i <= capacity; i++) {
+            stack.push(queue.dequeue());
+        }
+
+        for (int i = 1; i <= capacity; i++) {
+            queue.enqueue(stack.pop());
+        }
+
+        for (int i = 1; i <= capacity; i++) {
+            stack.push(queue.dequeue());
+        }
+
+        for (int i = 1; i <= capacity; i++) {
+            assertEquals(i, (int) stack.pop());
+        }
     }
 
     private void testQueueAdt(Queue<Integer> queue) {
