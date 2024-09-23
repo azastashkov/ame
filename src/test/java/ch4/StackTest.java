@@ -130,6 +130,19 @@ public class StackTest {
         }
     }
 
+    // 4.8.28
+    // Given an array of numbers, recursively remove adjacent duplicates
+    @Test
+    public void recursivelyRemoveAdjacentDuplicates() {
+        int[] array1 = { 1, 5, 6, 8, 8, 8, 0, 1, 1, 0, 6, 5 };
+        int[] expected1 = { 1 };
+        assertArrayEquals(expected1, recursivelyRemoveAdjacentDuplicates(array1));
+
+        int[] array2 = { 1, 9, 6, 8, 8, 8, 0, 1, 1, 0, 6, 5 };
+        int[] expected2 = { 1, 9, 5 };
+        assertArrayEquals(expected2, recursivelyRemoveAdjacentDuplicates(array2));
+    }
+
     private void testStackAdt(Stack<Integer> stack) {
         for (int i = 1; i <= 4; i++) {
             stack.push(i);
@@ -395,5 +408,28 @@ public class StackTest {
             ascending.push(tmp);
         }
         return ascending;
+    }
+
+    private int[] recursivelyRemoveAdjacentDuplicates(int[] array) {
+        int inPlaceStackPointer = -1;
+        int i = 0;
+        while (i < array.length) {
+            if (inPlaceStackPointer == -1 || array[i] != array[inPlaceStackPointer]) {
+                inPlaceStackPointer++;
+                array[inPlaceStackPointer] = array[i];
+                i++;
+            } else {
+                while (i < array.length && array[i] == array[inPlaceStackPointer]) {
+                    i++;
+                }
+                inPlaceStackPointer--;
+            }
+        }
+
+        int resultArrayLength = inPlaceStackPointer + 1;
+        int[] result = new int[resultArrayLength];
+        System.arraycopy(array, 0, result, 0, resultArrayLength);
+
+        return result;
     }
 }
