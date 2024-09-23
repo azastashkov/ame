@@ -44,6 +44,13 @@ public class QueueTest {
         assertEquals(0, queue.size());
     }
 
+    // 5.7.2
+    // Implement a queue using two stacks
+    @Test
+    public void testTwoStacksBasedQueue() {
+        testQueueAdt(new LinkedListBasedQueue<>(4));
+    }
+
     private void testQueueAdt(Queue<Integer> queue) {
         for (int i = 1; i <= 4; i++) {
             queue.enqueue(i);
