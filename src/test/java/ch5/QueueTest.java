@@ -5,6 +5,7 @@ import ch4.LinkedListBasedStack;
 import ch4.Stack;
 import org.junit.Test;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
@@ -81,6 +82,35 @@ public class QueueTest {
         for (int i = 1; i <= capacity; i++) {
             assertEquals(i, (int) stack.pop());
         }
+    }
+
+    // 5.7.9
+    // Given a queue of integers, rearrange the elements by interleaving the first half of the list with the second one
+    @Test
+    public void interleaveQueueItems() {
+        Queue<Integer> queue = new FixedSizeCircularArrayQueue<>(10);
+        for (int i = 11; i <= 20; i++) {
+            queue.enqueue(i);
+        }
+
+        int half = queue.size() / 2;
+        Queue<Integer> firstHalf = new FixedSizeCircularArrayQueue<>(half);
+        for (int i = 0; i < half; i++) {
+            firstHalf.enqueue(queue.dequeue());
+        }
+
+        for (int i = 0; i < half; i++) {
+            queue.enqueue(firstHalf.dequeue());
+            queue.enqueue(queue.dequeue());
+        }
+
+        int[] result = new int[queue.size()];
+        for (int i = 0; i < 10; i++) {
+            result[i] = queue.dequeue();
+        }
+
+        int[] expected = { 11, 16, 12, 17, 13, 18, 14, 19, 15, 20 };
+        assertArrayEquals(expected, result);
     }
 
     private void testQueueAdt(Queue<Integer> queue) {
