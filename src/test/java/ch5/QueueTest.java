@@ -113,6 +113,31 @@ public class QueueTest {
         assertArrayEquals(expected, result);
     }
 
+    // 5.7.10
+    // Given an integer k and a queue of integers, reverse the order of the first k elements of the queue
+    // leaving the other elements in the same relative order
+    @Test
+    public void reverseFirstKElementsOfQueue() {
+        Queue<Integer> queue = new LinkedListBasedQueue<>(9);
+        for (int i = 10; i <= 90; i+= 10) {
+            queue.enqueue(i);
+        }
+
+        int k = 4;
+        Stack<Integer> stack = new FixedSizeArrayStack<>(k);
+        for (int i = 0; i < k; i++) {
+            stack.push(queue.dequeue());
+        }
+
+        while (!stack.isEmpty()) {
+            queue.enqueue(stack.pop());
+        }
+
+        for (int i = k; i < queue.size() - k; i++) {
+            queue.enqueue(queue.dequeue());
+        }
+    }
+
     private void testQueueAdt(Queue<Integer> queue) {
         for (int i = 1; i <= 4; i++) {
             queue.enqueue(i);
