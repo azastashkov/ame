@@ -23,7 +23,7 @@ public class DynamicArrayStack<E extends Comparable<E>> extends FixedSizeArraySt
     @Override
     protected E doPop() {
         if (size() == capacity / 4) {
-            resize(Math.min(top << 1, capacity));
+            resize(Math.max(1, top << 1));
         }
         return super.doPop();
     }

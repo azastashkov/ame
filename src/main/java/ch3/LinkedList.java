@@ -305,18 +305,4 @@ public class LinkedList<E extends Comparable<E>> {
             throw new IndexOutOfBoundsException();
         }
     }
-
-    private static class Node<E> {
-        private final E element;
-        private Node<E> next;
-
-        public Node(E element) {
-            this.element = element;
-        }
-
-        public Node(E element, Node<E> next) {
-            this.element = element;
-            this.next = next;
-        }
-    }
 }
