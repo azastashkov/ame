@@ -1,6 +1,6 @@
 package ch3;
 
-public class LinkedList<E extends Comparable<E>> {
+public class LinkedList<E> {
     private Node<E> head;
     private int size;
 
@@ -201,36 +201,6 @@ public class LinkedList<E extends Comparable<E>> {
 
         current.next = head;
         head = newHead;
-    }
-
-    public void partition(E pivotItem) {
-        Node<E> first = null, second = null, newHead = null, pivot = null;
-        Node<E> current = head;
-        while (current != null) {
-            if (current.item.compareTo(pivotItem) < 0) {
-                if (first == null) {
-                    first = new Node<>(current.item);
-                    newHead = first;
-                } else {
-                    first.next = new Node<>(current.item);
-                    first = first.next;
-                }
-            } else {
-                if (second == null) {
-                    second = new Node<>(current.item);
-                    pivot = second;
-                } else {
-                    second.next = new Node<>(current.item);
-                    second = second.next;
-                }
-            }
-            current = current.next;
-        }
-
-        if (newHead != null) {
-            first.next = pivot;
-            head = newHead;
-        }
     }
 
     @Override

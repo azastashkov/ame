@@ -284,34 +284,6 @@ public class LinkedListTest {
         assertEquals(expected2, list2);
     }
 
-    // 3.11.59
-    // Given a linked list and a value k, partition it such that all nodes less than k come
-    // before nodes greater than or equal to k. The original relative order of the nodes in
-    // partitions should be preserved. E.g. given 1->4->3->2->5->2 and k = 3, return
-    // 1->2->2->4->3->5
-    @Test
-    public void partitionLinkedList() {
-        LinkedList<Integer> list = new LinkedList<>();
-        list.add(1);
-        list.add(4);
-        list.add(3);
-        list.add(2);
-        list.add(5);
-        list.add(2);
-
-        list.partition(3);
-
-        LinkedList<Integer> expected = new LinkedList<>();
-        expected.add(1);
-        expected.add(2);
-        expected.add(2);
-        expected.add(4);
-        expected.add(3);
-        expected.add(5);
-
-        assertEquals(expected, list);
-    }
-
     private int findIntersection(LinkedList<Integer> shorterList, LinkedList<Integer> longerList) {
         for (int si = 0, li = longerList.size() - shorterList.size(); si < longerList.size(); li++, si++) {
             if (longerList.get(li).equals(shorterList.get(si))) {

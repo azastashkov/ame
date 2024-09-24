@@ -3,7 +3,7 @@ package ch5;
 import ch4.LinkedListBasedStack;
 import ch4.Stack;
 
-public class TwoStacksBasedQueue<E extends Comparable<E>> extends AbstractQueue<E> {
+public class TwoStacksBasedQueue<E> extends AbstractQueue<E> {
     private Stack<E> stack1;
     private Stack<E> stack2;
 

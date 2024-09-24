@@ -308,7 +308,7 @@ public class StackTest {
         return true;
     }
 
-    private <T extends Comparable<T>> void reverse(Stack<T> stack) {
+    private <T> void reverse(Stack<T> stack) {
         if (stack.isEmpty()) {
             return;
         }
@@ -318,7 +318,7 @@ public class StackTest {
         insertAtBottom(stack, tmp);
     }
 
-    private <T extends Comparable<T>> void  insertAtBottom(Stack<T> stack, T data) {
+    private <T> void  insertAtBottom(Stack<T> stack, T data) {
         if (stack.isEmpty()) {
             stack.push(data);
             return;

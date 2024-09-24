@@ -1,6 +1,6 @@
 package ch5;
 
-public interface Queue<E extends Comparable<E>> {
+public interface Queue<E> {
     void enqueue(E element);
     E dequeue();
     int size();

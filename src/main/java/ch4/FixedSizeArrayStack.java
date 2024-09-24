@@ -1,13 +1,13 @@
 package ch4;
 
-public class FixedSizeArrayStack<E extends Comparable<E>> extends AbstractStack<E> {
+public class FixedSizeArrayStack<E> extends AbstractStack<E> {
     protected E[] array;
     protected int top;
 
     @SuppressWarnings("unchecked")
     public FixedSizeArrayStack(int capacity) {
         super(capacity);
-        array = (E[]) new Comparable[capacity];
+        array = (E[]) new Object[capacity];
     }
 
     @Override

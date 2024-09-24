@@ -160,7 +160,7 @@ public class QueueTest {
         });
     }
 
-    private <T extends Comparable<T>> void reverse(Queue<T> queue) {
+    private <T> void reverse(Queue<T> queue) {
         int size = queue.size();
         Stack<T> stack = new LinkedListBasedStack<>(size);
         for (int i = 0; i < size; i++) {

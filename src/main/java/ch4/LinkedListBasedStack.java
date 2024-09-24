@@ -2,7 +2,7 @@ package ch4;
 
 import ch3.LinkedList;
 
-public class LinkedListBasedStack<E extends Comparable<E>> extends AbstractStack<E> {
+public class LinkedListBasedStack<E> extends AbstractStack<E> {
     private final LinkedList<E> list = new LinkedList<>();
 
     public LinkedListBasedStack(int capacity) {

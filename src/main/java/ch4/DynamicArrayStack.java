@@ -1,6 +1,6 @@
 package ch4;
 
-public class DynamicArrayStack<E extends Comparable<E>> extends FixedSizeArrayStack<E> {
+public class DynamicArrayStack<E> extends FixedSizeArrayStack<E> {
     public DynamicArrayStack(int capacity) {
         this(capacity, 1 << 8);
     }
@@ -8,7 +8,7 @@ public class DynamicArrayStack<E extends Comparable<E>> extends FixedSizeArraySt
     @SuppressWarnings("unchecked")
     public DynamicArrayStack(int capacity, int initialCapacity) {
         super(capacity);
-        array = (E[]) new Comparable[initialCapacity];
+        array = (E[]) new Object[initialCapacity];
     }
 
     @Override
@@ -30,7 +30,7 @@ public class DynamicArrayStack<E extends Comparable<E>> extends FixedSizeArraySt
 
     @SuppressWarnings("unchecked")
     private void resize(int newCapacity) {
-        E[] newArray = (E[]) new Comparable[newCapacity];
+        E[] newArray = (E[]) new Object[newCapacity];
         System.arraycopy(array, 0, newArray, 0, top);
         array = newArray;
     }

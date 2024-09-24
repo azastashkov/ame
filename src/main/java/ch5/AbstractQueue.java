@@ -1,6 +1,6 @@
 package ch5;
 
-public abstract class AbstractQueue<E extends Comparable<E>> implements Queue<E> {
+public abstract class AbstractQueue<E> implements Queue<E> {
     protected final int capacity;
     protected int size;
 

@@ -1,6 +1,6 @@
 package ch5;
 
-public class FixedSizeCircularArrayQueue<E extends Comparable<E>> extends AbstractQueue<E> {
+public class FixedSizeCircularArrayQueue<E> extends AbstractQueue<E> {
     protected E[] array;
     protected int headIndex;
     protected int tailIndex;
@@ -8,7 +8,7 @@ public class FixedSizeCircularArrayQueue<E extends Comparable<E>> extends Abstra
     @SuppressWarnings("unchecked")
     public FixedSizeCircularArrayQueue(int capacity) {
         super(capacity);
-        array = (E[]) new Comparable[capacity];
+        array = (E[]) new Object[capacity];
     }
 
     @Override

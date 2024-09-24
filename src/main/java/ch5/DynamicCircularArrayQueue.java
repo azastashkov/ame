@@ -1,6 +1,6 @@
 package ch5;
 
-public class DynamicCircularArrayQueue <E extends Comparable<E>> extends FixedSizeCircularArrayQueue<E> {
+public class DynamicCircularArrayQueue<E> extends FixedSizeCircularArrayQueue<E> {
     public DynamicCircularArrayQueue(int capacity) {
         this(capacity, 1 << 8);
     }
@@ -8,7 +8,7 @@ public class DynamicCircularArrayQueue <E extends Comparable<E>> extends FixedSi
     @SuppressWarnings("unchecked")
     public DynamicCircularArrayQueue(int capacity, int initialCapacity) {
         super(capacity);
-        array = (E[]) new Comparable[initialCapacity];
+        array = (E[]) new Object[initialCapacity];
     }
 
     @Override
@@ -37,7 +37,7 @@ public class DynamicCircularArrayQueue <E extends Comparable<E>> extends FixedSi
 
     @SuppressWarnings("unchecked")
     private void resize(int newCapacity) {
-        E[] newArray = (E[]) new Comparable[newCapacity];
+        E[] newArray = (E[]) new Object[newCapacity];
         for (int i = headIndex; i <= tailIndex; i++) {
             newArray[i - headIndex] = array[i % array.length];
         }

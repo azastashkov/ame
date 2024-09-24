@@ -1,6 +1,6 @@
 package ch4;
 
-public interface Stack<E extends Comparable<E>> {
+public interface Stack<E> {
     void push(E value);
     E pop();
     E peek();

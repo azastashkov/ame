@@ -2,7 +2,7 @@ package ch4;
 
 import java.util.EmptyStackException;
 
-public abstract class AbstractStack<E extends Comparable<E>> implements Stack<E> {
+public abstract class AbstractStack<E> implements Stack<E> {
     protected final int capacity;
 
     public AbstractStack(int capacity) {

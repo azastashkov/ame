@@ -2,7 +2,7 @@ package ch5;
 
 import ch3.LinkedList.Node;
 
-public class LinkedListBasedQueue<E extends Comparable<E>> extends AbstractQueue<E> {
+public class LinkedListBasedQueue<E> extends AbstractQueue<E> {
     private Node<E> head;
     private Node<E> tail;
 
