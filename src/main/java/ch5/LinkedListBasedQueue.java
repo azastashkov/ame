@@ -1,6 +1,6 @@
 package ch5;
 
-import ch3.Node;
+import ch3.LinkedList.Node;
 
 public class LinkedListBasedQueue<E extends Comparable<E>> extends AbstractQueue<E> {
     private Node<E> head;
@@ -24,7 +24,7 @@ public class LinkedListBasedQueue<E extends Comparable<E>> extends AbstractQueue
 
     @Override
     protected E doDequeue() {
-        E element = head.element;
+        E element = head.item;
         head = head.next;
         if (size-- == 0) {
             tail = null;

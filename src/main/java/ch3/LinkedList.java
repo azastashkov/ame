@@ -15,7 +15,7 @@ public class LinkedList<E extends Comparable<E>> {
             head = head.next;
             formerHead.next = null;
             size--;
-            return formerHead.element;
+            return formerHead.item;
         }
         return null;
     }
@@ -45,14 +45,14 @@ public class LinkedList<E extends Comparable<E>> {
     public E get(int index) {
         checkBounds(index);
 
-        return getNode(index).element;
+        return getNode(index).item;
     }
 
     public E lastOf(int index) {
         checkBounds(index);
 
         int lastOfPosition = size - index - 1;
-        return getNode(lastOfPosition).element;
+        return getNode(lastOfPosition).item;
     }
 
     public void insert(E element, int index) {
@@ -125,10 +125,10 @@ public class LinkedList<E extends Comparable<E>> {
 
     public boolean isPalindrome() {
         Node<E> node = getNode(size / 2);
-        Node<E> copy = new Node<>(node.element);
+        Node<E> copy = new Node<>(node.item);
         Node<E> copyHead = copy;
         while (node.next != null) {
-            copy.next = new Node<>(node.next.element);
+            copy.next = new Node<>(node.next.item);
             node = node.next;
             copy = copy.next;
         }
@@ -137,7 +137,7 @@ public class LinkedList<E extends Comparable<E>> {
 
         node = head;
         while (copy.next != null) {
-            if (!copy.element.equals(node.element)) {
+            if (!copy.item.equals(node.item)) {
                 return false;
             }
             copy = copy.next;
@@ -207,20 +207,20 @@ public class LinkedList<E extends Comparable<E>> {
         Node<E> first = null, second = null, newHead = null, pivot = null;
         Node<E> current = head;
         while (current != null) {
-            if (current.element.compareTo(pivotItem) < 0) {
+            if (current.item.compareTo(pivotItem) < 0) {
                 if (first == null) {
-                    first = new Node<>(current.element);
+                    first = new Node<>(current.item);
                     newHead = first;
                 } else {
-                    first.next = new Node<>(current.element);
+                    first.next = new Node<>(current.item);
                     first = first.next;
                 }
             } else {
                 if (second == null) {
-                    second = new Node<>(current.element);
+                    second = new Node<>(current.item);
                     pivot = second;
                 } else {
-                    second.next = new Node<>(current.element);
+                    second.next = new Node<>(current.item);
                     second = second.next;
                 }
             }
@@ -240,7 +240,7 @@ public class LinkedList<E extends Comparable<E>> {
         if (head != null) {
             Node<E> node = head;
             while (node != null) {
-                sb.append(node.element).append(", ");
+                sb.append(node.item).append(", ");
                 node = node.next;
             }
             sb.delete(sb.length() - 2, sb.length());
@@ -303,6 +303,20 @@ public class LinkedList<E extends Comparable<E>> {
     private void checkBounds(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
+        }
+    }
+
+    public static class Node<E> {
+        public final E item;
+        public Node<E> next;
+
+        public Node(E item) {
+            this.item = item;
+        }
+
+        public Node(E item, Node<E> next) {
+            this.item = item;
+            this.next = next;
         }
     }
 }
