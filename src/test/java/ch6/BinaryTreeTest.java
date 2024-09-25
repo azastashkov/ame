@@ -10,7 +10,7 @@ import static org.junit.Assert.assertArrayEquals;
 public class BinaryTreeTest {
     @Test
     public void testBinaryTree() {
-        Integer[] values = { 1, 2, 3, null, null, 4, 5, null, 6 };
+        Integer[] values = getBinaryTreeValues();
         BinaryTree<Integer> binaryTree = BinaryTree.of(values);
         testBinaryTreeAdt(binaryTree, Arrays.stream(values).filter(Objects::nonNull).toArray().length);
     }
@@ -27,5 +27,16 @@ public class BinaryTreeTest {
         NodeCollectorVisitorAction<E> postOrderCollector = new NodeCollectorVisitorAction<>(capacity);
         binaryTree.traverse(new PostOrderNodeVisitor<>(postOrderCollector));
         assertArrayEquals(new Integer[] { 2, 6, 4, 5, 3, 1 }, postOrderCollector.getArray());
+    }
+
+    private Integer[] getBinaryTreeValues() {
+        //        1
+        //       / \
+        //      2   3
+        //         / \
+        //        4   5
+        //         \
+        //          6
+        return new Integer[] { 1, 2, 3, null, null, 4, 5, null, 6 };
     }
 }
