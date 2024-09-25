@@ -189,6 +189,40 @@ public class BinaryTreeTest {
         assertEquals(expectedHeight, result.get());
     }
 
+    // 6.4.11
+    // Find minimum depth of binary tree
+    @Test
+    public void findMinimumDepthOfBinaryTree() {
+        Integer[] values = getBinaryTreeValues();
+        BinaryTree<Integer> binaryTree = BinaryTree.of(values);
+
+        final int expectedDepth = 2;
+        final AtomicInteger result = new AtomicInteger();
+
+        Visitor<Integer> visitor = new Visitor<Integer>() {
+            @Override
+            public void visit(BinaryTree.Node<Integer> node) {
+                result.set(minimumDepth(node));
+            }
+
+            private int minimumDepth(BinaryTree.Node<Integer> node) {
+                if (node == null) {
+                    return 0;
+                }
+
+                if (node.left == null && node.right == null) {
+                    return 1;
+                }
+
+                return Math.min(minimumDepth(node.left), minimumDepth(node.right)) + 1;
+            }
+        };
+
+        binaryTree.traverse(visitor);
+
+        assertEquals(expectedDepth, result.get());
+    }
+
     private <E> void testBinaryTreeAdt(BinaryTree<E> binaryTree, int capacity) {
         NodeCollectorVisitorAction<E> preOrderCollector = new NodeCollectorVisitorAction<>(capacity);
         binaryTree.traverse(new PreOrderNodeVisitor<>(preOrderCollector));
