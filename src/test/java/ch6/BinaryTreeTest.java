@@ -223,6 +223,37 @@ public class BinaryTreeTest {
         assertEquals(expectedDepth, result.get());
     }
 
+    // 6.4.14
+    // Find the deepest node of a binary tree
+    @Test
+    public void findDeepestNodeOfBinaryTree() {
+        Integer[] values = getBinaryTreeValues();
+        BinaryTree<Integer> binaryTree = BinaryTree.of(values);
+
+        final int expectedItem = 6;
+        final AtomicInteger result = new AtomicInteger();
+
+        binaryTree.traverse(root -> {
+            Queue<BinaryTree.Node<Integer>> queue = new FixedSizeCircularArrayQueue<>(values.length);
+            queue.enqueue(root);
+
+            while (!queue.isEmpty()) {
+                BinaryTree.Node<Integer> node = queue.dequeue();
+                result.set(node.item);
+
+                if (node.left != null) {
+                    queue.enqueue(node.left);
+                }
+
+                if (node.right != null) {
+                    queue.enqueue(node.right);
+                }
+            }
+        });
+
+        assertEquals(expectedItem, result.get());
+    }
+
     private <E> void testBinaryTreeAdt(BinaryTree<E> binaryTree, int capacity) {
         NodeCollectorVisitorAction<E> preOrderCollector = new NodeCollectorVisitorAction<>(capacity);
         binaryTree.traverse(new PreOrderNodeVisitor<>(preOrderCollector));
