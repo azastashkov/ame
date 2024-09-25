@@ -55,7 +55,7 @@ public class BinaryTree<E> implements Traversable<E> {
     }
 
     public static class Node<E> implements Traversable<E> {
-        public final E item;
+        public E item;
         public Node<E> left;
         public Node<E> right;
 

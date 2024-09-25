@@ -254,6 +254,84 @@ public class BinaryTreeTest {
         assertEquals(expectedItem, result.get());
     }
 
+    // 6.4.15
+    // Delete an item from binary tree
+    @Test
+    public void deleteItemFromBinaryTree() {
+        Integer[] values = getBinaryTreeValues();
+        BinaryTree<Integer> binaryTree = BinaryTree.of(values);
+
+        final int deletedItem = 4;
+        final int nodesInTree = filterNullValues(values).length;
+
+        Visitor<Integer> visitor = new Visitor<Integer>() {
+            @Override
+            public void visit(BinaryTree.Node<Integer> root) {
+                Queue<BinaryTree.Node<Integer>> queue = new FixedSizeCircularArrayQueue<>(nodesInTree);
+                queue.enqueue(root);
+                BinaryTree.Node<Integer> deepest = root, deleted = null;
+
+                while (!queue.isEmpty()) {
+                    deepest = queue.dequeue();
+
+                    if (deepest.item.equals(deletedItem)) {
+                        deleted = deepest;
+                    }
+
+                    if (deepest.left != null) {
+                        queue.enqueue(deepest.left);
+                    }
+
+                    if (deepest.right != null) {
+                        queue.enqueue(deepest.right);
+                    }
+                }
+
+                if (deleted != null) {
+                    deleted.item = deepest.item;
+                    deleteDeepest(root, deepest);
+                }
+            }
+
+            private void deleteDeepest(BinaryTree.Node<Integer> root, BinaryTree.Node<Integer> deepest) {
+                if (root == null) {
+                    return;
+                }
+
+                Queue<BinaryTree.Node<Integer>> queue = new FixedSizeCircularArrayQueue<>(nodesInTree);
+                queue.enqueue(root);
+
+                while (!queue.isEmpty()) {
+                    BinaryTree.Node<Integer> node = queue.dequeue();
+
+                    if (node.left != null) {
+                        if (node.left == deepest) {
+                            node.left = null;
+                            return;
+                        } else {
+                            queue.enqueue(node.left);
+                        }
+                    }
+
+                    if (node.right != null) {
+                        if (node.right == deepest) {
+                            node.right = null;
+                            return;
+                        } else {
+                            queue.enqueue(node.right);
+                        }
+                    }
+                }
+            }
+        };
+
+        binaryTree.traverse(visitor);
+
+        NodeCollectorVisitorAction<Integer> preOrderCollector = new NodeCollectorVisitorAction<>(5);
+        binaryTree.traverse(new PreOrderNodeVisitor<>(preOrderCollector));
+        assertArrayEquals(new Integer[] { 1, 2, 3, 6, 5 }, preOrderCollector.getArray());
+    }
+
     private <E> void testBinaryTreeAdt(BinaryTree<E> binaryTree, int capacity) {
         NodeCollectorVisitorAction<E> preOrderCollector = new NodeCollectorVisitorAction<>(capacity);
         binaryTree.traverse(new PreOrderNodeVisitor<>(preOrderCollector));
