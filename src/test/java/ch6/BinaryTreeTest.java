@@ -1,5 +1,7 @@
 package ch6;
 
+import ch4.FixedSizeArrayStack;
+import ch4.Stack;
 import ch5.FixedSizeCircularArrayQueue;
 import ch5.Queue;
 import org.junit.Test;
@@ -121,6 +123,72 @@ public class BinaryTreeTest {
         assertEquals(expectedSize, preOrderCollector.getSize());
     }
 
+    // 6.4.9
+    // Print binary tree in reverse order
+    @Test
+    public void printBinaryTreeInReverseOrder() {
+        Integer[] values = getFullBinaryTreeValues();
+        BinaryTree<Integer> binaryTree = BinaryTree.of(values);
+
+        Stack<Integer> stack = new FixedSizeArrayStack<>(values.length);
+
+        binaryTree.traverse(root -> {
+            Queue<BinaryTree.Node<Integer>> queue = new FixedSizeCircularArrayQueue<>(values.length);
+            queue.enqueue(root);
+
+            while (!queue.isEmpty()) {
+                BinaryTree.Node<Integer> node = queue.dequeue();
+
+                if (node.left != null) {
+                    queue.enqueue(node.left);
+                }
+
+                if (node.right != null) {
+                    queue.enqueue(node.right);
+                }
+
+                stack.push(node.item);
+            }
+        });
+
+        Integer[] expected = { 7, 6, 5, 4, 3, 2, 1 };
+
+        int i = 0;
+        while (!stack.isEmpty()) {
+            assertEquals(expected[i++], stack.pop());
+        }
+    }
+
+    // 6.4.10
+    // Find the height of binary tree
+    @Test
+    public void findHeightOfBinaryTree() {
+        Integer[] values = getBinaryTreeValues();
+        BinaryTree<Integer> binaryTree = BinaryTree.of(values);
+
+        final int expectedHeight = 4;
+        final AtomicInteger result = new AtomicInteger();
+
+        Visitor<Integer> visitor = new Visitor<Integer>() {
+            @Override
+            public void visit(BinaryTree.Node<Integer> node) {
+                result.set(height(node));
+            }
+
+            private int height(BinaryTree.Node<Integer> node) {
+                if (node == null) {
+                    return 0;
+                }
+
+                return Math.max(height(node.left), height(node.right)) + 1;
+            }
+        };
+
+        binaryTree.traverse(visitor);
+
+        assertEquals(expectedHeight, result.get());
+    }
+
     private <E> void testBinaryTreeAdt(BinaryTree<E> binaryTree, int capacity) {
         NodeCollectorVisitorAction<E> preOrderCollector = new NodeCollectorVisitorAction<>(capacity);
         binaryTree.traverse(new PreOrderNodeVisitor<>(preOrderCollector));
@@ -144,6 +212,15 @@ public class BinaryTreeTest {
         //         \
         //          6
         return new Integer[] { 1, 2, 3, null, null, 4, 5, null, 6 };
+    }
+
+    private Integer[] getFullBinaryTreeValues() {
+        //        1
+        //      /   \
+        //     2     3
+        //    / \   / \
+        //   4   5 6   7
+        return new Integer[]{1, 2, 3, 4, 5, 6, 7};
     }
 
     private Integer[] filterNullValues(Integer[] values) {
