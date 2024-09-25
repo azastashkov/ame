@@ -1,18 +1,70 @@
 package ch6;
 
+import ch5.FixedSizeCircularArrayQueue;
+import ch5.Queue;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 public class BinaryTreeTest {
     @Test
     public void testBinaryTree() {
         Integer[] values = getBinaryTreeValues();
         BinaryTree<Integer> binaryTree = BinaryTree.of(values);
-        testBinaryTreeAdt(binaryTree, Arrays.stream(values).filter(Objects::nonNull).toArray().length);
+        testBinaryTreeAdt(binaryTree, filterNullValues(values).length);
+    }
+
+    // 6.4.1
+    // Find maximum item in binary tree
+    @Test
+    public void findMaximumItemInBinaryTree() {
+        Integer[] values = getBinaryTreeValues();
+        BinaryTree<Integer> binaryTree = BinaryTree.of(values);
+
+        MaximumItemVisitorAction<Integer> maximumItemVisitorAction = new MaximumItemVisitorAction<>();
+        binaryTree.traverse(new InOrderNodeVisitor<>(maximumItemVisitorAction));
+
+        assertEquals(6, (int) maximumItemVisitorAction.getMax());
+    }
+
+    // 6.4.3
+    // Find an item in binary tree
+    @Test
+    public void findItemInBinaryTree() {
+        Integer[] values = getBinaryTreeValues();
+        BinaryTree<Integer> binaryTree = BinaryTree.of(values);
+
+        final int searchedItem = 4;
+        AtomicInteger result = new AtomicInteger();
+
+        binaryTree.traverse(root -> {
+            Queue<BinaryTree.Node<Integer>> queue = new FixedSizeCircularArrayQueue<>(filterNullValues(values).length);
+            queue.enqueue(root);
+
+            while (!queue.isEmpty()) {
+                BinaryTree.Node<Integer> node = queue.dequeue();
+
+                if (node.item != null && node.item.equals(searchedItem)) {
+                    result.set(node.item);
+                    return;
+                }
+
+                if (node.left != null) {
+                    queue.enqueue(node.left);
+                }
+
+                if (node.right != null) {
+                    queue.enqueue(node.right);
+                }
+            }
+        });
+
+        assertEquals(searchedItem, result.get());
     }
 
     private <E> void testBinaryTreeAdt(BinaryTree<E> binaryTree, int capacity) {
@@ -38,5 +90,9 @@ public class BinaryTreeTest {
         //         \
         //          6
         return new Integer[] { 1, 2, 3, null, null, 4, 5, null, 6 };
+    }
+
+    private Integer[] filterNullValues(Integer[] values) {
+        return Arrays.stream(values).filter(Objects::nonNull).toArray(Integer[]::new);
     }
 }
