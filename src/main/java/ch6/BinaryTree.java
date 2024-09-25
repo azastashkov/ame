@@ -54,6 +54,10 @@ public class BinaryTree<E> implements Traversable<E> {
         root.traverse(visitor);
     }
 
+    public Node<E> getRoot() {
+        return root;
+    }
+
     public static class Node<E> implements Traversable<E> {
         public E item;
         public Node<E> left;

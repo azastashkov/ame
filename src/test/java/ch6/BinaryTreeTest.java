@@ -12,6 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class BinaryTreeTest {
     @Test
@@ -332,6 +333,19 @@ public class BinaryTreeTest {
         assertArrayEquals(new Integer[] { 1, 2, 3, 6, 5 }, preOrderCollector.getArray());
     }
 
+    // 6.4.19
+    // Check that two binary trees are structurally identical
+    @Test
+    public void checkThatTwoBinaryTreesAreStructurallyIdentical() {
+        Integer[] treeValues1 = { 1, 2, 3, null, null, 4, 5, null, 6 };
+        Integer[] treeValues2 = { 7, 8, 9, null, null, 10, 11, null, 12 };
+
+        BinaryTree<Integer> binaryTree1 = BinaryTree.of(treeValues1);
+        BinaryTree<Integer> binaryTree2 = BinaryTree.of(treeValues2);
+
+        assertTrue(structurallyIdentical(binaryTree1.getRoot(), binaryTree2.getRoot()));
+    }
+
     private <E> void testBinaryTreeAdt(BinaryTree<E> binaryTree, int capacity) {
         NodeCollectorVisitorAction<E> preOrderCollector = new NodeCollectorVisitorAction<>(capacity);
         binaryTree.traverse(new PreOrderNodeVisitor<>(preOrderCollector));
@@ -368,5 +382,17 @@ public class BinaryTreeTest {
 
     private Integer[] filterNullValues(Integer[] values) {
         return Arrays.stream(values).filter(Objects::nonNull).toArray(Integer[]::new);
+    }
+
+    private boolean structurallyIdentical(BinaryTree.Node<Integer> root1, BinaryTree.Node<Integer> root2) {
+        if (root1 == null && root2 == null) {
+            return true;
+        }
+
+        if (root1 == null || root2 == null) {
+            return false;
+        }
+
+        return structurallyIdentical(root1.left, root2.left) && structurallyIdentical(root1.right, root2.right);
     }
 }
