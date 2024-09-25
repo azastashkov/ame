@@ -67,6 +67,60 @@ public class BinaryTreeTest {
         assertEquals(searchedItem, result.get());
     }
 
+    // 6.4.5
+    // Insert an item in binary tree
+    @Test
+    public void insertItemInBinaryTree() {
+        Integer[] values = getBinaryTreeValues();
+        BinaryTree<Integer> binaryTree = BinaryTree.of(values);
+
+        final int insertedItem = 7;
+        final int initialItemsCount = filterNullValues(values).length;
+
+        binaryTree.traverse(root -> {
+            Queue<BinaryTree.Node<Integer>> queue = new FixedSizeCircularArrayQueue(initialItemsCount);
+            queue.enqueue(root);
+
+            while (!queue.isEmpty()) {
+                BinaryTree.Node<Integer> node = queue.dequeue();
+
+                if (node.left != null) {
+                    queue.enqueue(node.left);
+                } else {
+                    node.left = new BinaryTree.Node<>(insertedItem);
+                    return;
+                }
+
+                if (node.right != null) {
+                    queue.enqueue(node.right);
+                } else {
+                    node.right = new BinaryTree.Node<>(insertedItem);
+                    return;
+                }
+            }
+        });
+
+        NodeCollectorVisitorAction<Integer> preOrderCollector
+                = new NodeCollectorVisitorAction<>(initialItemsCount + 1);
+        binaryTree.traverse(new PreOrderNodeVisitor<>(preOrderCollector));
+        assertArrayEquals(new Integer[] { 1, 2, 7, 3, 4, 6, 5 }, preOrderCollector.getArray());
+    }
+
+    // 6.4.6
+    // Find the size of binary tree
+    @Test
+    public void findSizeOfBinaryTree() {
+        Integer[] values = getBinaryTreeValues();
+        BinaryTree<Integer> binaryTree = BinaryTree.of(values);
+
+        final int expectedSize = filterNullValues(values).length;
+
+        NodeCollectorVisitorAction<Integer> preOrderCollector
+                = new NodeCollectorVisitorAction<>(expectedSize);
+        binaryTree.traverse(new PreOrderNodeVisitor<>(preOrderCollector));
+        assertEquals(expectedSize, preOrderCollector.getSize());
+    }
+
     private <E> void testBinaryTreeAdt(BinaryTree<E> binaryTree, int capacity) {
         NodeCollectorVisitorAction<E> preOrderCollector = new NodeCollectorVisitorAction<>(capacity);
         binaryTree.traverse(new PreOrderNodeVisitor<>(preOrderCollector));

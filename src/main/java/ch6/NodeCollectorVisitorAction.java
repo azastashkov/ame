@@ -13,6 +13,10 @@ public class NodeCollectorVisitorAction<T> implements VisitorAction<T> {
         return array;
     }
 
+    public int getSize() {
+        return size;
+    }
+
     @Override
     public void accept(BinaryTree.Node<T> node) {
         array[size++] = node.item;
