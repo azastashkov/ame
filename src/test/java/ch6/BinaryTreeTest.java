@@ -626,7 +626,7 @@ public class BinaryTreeTest {
         //     2     3
         //    / \   / \
         //   4   5 6   7
-        return new Integer[ ]{ 1, 2, 3, 4, 5, 6, 7 };
+        return new Integer[] { 1, 2, 3, 4, 5, 6, 7 };
     }
 
     private Integer[] filterNullValues(Integer[] values) {
