@@ -346,6 +346,42 @@ public class BinaryTreeTest {
         assertTrue(structurallyIdentical(binaryTree1.getRoot(), binaryTree2.getRoot()));
     }
 
+    // 6.4.21
+    // Find the width of binary tree
+    @Test
+    public void findWidthOfBinaryTree() {
+        Integer[] values = getFullBinaryTreeValues();
+        BinaryTree<Integer> binaryTree = BinaryTree.of(values);
+
+        final int expectedWidth = 4;
+        final AtomicInteger maxWidth = new AtomicInteger();
+
+        binaryTree.traverse(root -> {
+            Queue<BinaryTree.Node<Integer>> queue = new FixedSizeCircularArrayQueue<>(values.length);
+            queue.enqueue(root);
+
+            int levelNodesCount;
+            while (!queue.isEmpty()) {
+                levelNodesCount = queue.size();
+                maxWidth.set(Math.max(maxWidth.get(), levelNodesCount));
+
+                while (levelNodesCount-- > 0) {
+                    BinaryTree.Node<Integer> node = queue.dequeue();
+
+                    if (node.left != null) {
+                        queue.enqueue(node.left);
+                    }
+
+                    if (node.right != null) {
+                        queue.enqueue(node.right);
+                    }
+                }
+            }
+        });
+
+        assertEquals(expectedWidth, maxWidth.get());
+    }
+
     private <E> void testBinaryTreeAdt(BinaryTree<E> binaryTree, int capacity) {
         NodeCollectorVisitorAction<E> preOrderCollector = new NodeCollectorVisitorAction<>(capacity);
         binaryTree.traverse(new PreOrderNodeVisitor<>(preOrderCollector));
