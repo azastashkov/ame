@@ -514,6 +514,24 @@ public class BinaryTreeTest {
         assertArrayEquals(new Integer[] { 1, 3, 5, 4, 6, 2 }, preOrderCollector.getArray());
     }
 
+    // 6.4.29
+    // Construct a binary tree from given in-order and pre-order traversals
+    @Test
+    public void constructBinaryTreeFromGivenInOrderAndPreOrderTraversals() {
+        Character[] inOrder = { 'D', 'B', 'E', 'A', 'F', 'C' };
+        Character[] preOrder = { 'A', 'B', 'D', 'E', 'C', 'F' };
+
+        BinaryTree<Character> binaryTree = BinaryTree.of(inOrder, preOrder);
+
+        NodeCollectorVisitorAction<Character> inOrderCollector = new NodeCollectorVisitorAction<>(inOrder.length);
+        binaryTree.traverse(new InOrderNodeVisitor<>(inOrderCollector));
+        assertArrayEquals(new Character[] {'D', 'B', 'E', 'A', 'F', 'C' }, inOrderCollector.getArray());
+
+        NodeCollectorVisitorAction<Character> preOrderCollector = new NodeCollectorVisitorAction<>(preOrder.length);
+        binaryTree.traverse(new PreOrderNodeVisitor<>(preOrderCollector));
+        assertArrayEquals(new Character[] { 'A', 'B', 'D', 'E', 'C', 'F' }, preOrderCollector.getArray());
+    }
+
     private <E> void testBinaryTreeAdt(BinaryTree<E> binaryTree, int capacity) {
         NodeCollectorVisitorAction<E> preOrderCollector = new NodeCollectorVisitorAction<>(capacity);
         binaryTree.traverse(new PreOrderNodeVisitor<>(preOrderCollector));

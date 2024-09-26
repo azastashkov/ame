@@ -45,6 +45,40 @@ public class BinaryTree<E> implements Traversable<E> {
         return new BinaryTree<>(rootNode);
     }
 
+    public static <E> BinaryTree<E> of(E[] inOrder, E[] preOrder) {
+        if (inOrder.length == 0 || inOrder.length != preOrder.length) {
+            return new BinaryTree<>();
+        }
+
+        Node<E> rootNode = createNode(preOrder, 0, preOrder.length - 1,
+                inOrder, 0, inOrder.length - 1);
+
+        return new BinaryTree<>(rootNode);
+    }
+
+    private static <E> Node<E> createNode(E[] preOrder, int preStart, int preEnd, E[] inOrder, int inStart, int inEnd) {
+        if (preStart > preEnd || inStart > inEnd) {
+            return null;
+        }
+
+        E item = preOrder[preStart];
+        Node<E> node = new Node<>(item);
+
+        int offset = inStart;
+        for (; offset < inEnd; offset++) {
+            if (inOrder[offset] == item) {
+                break;
+            }
+        }
+
+        node.left = createNode(preOrder, preStart + 1, preStart + offset - inStart,
+                inOrder, inStart, offset - 1);
+        node.right = createNode(preOrder, preStart + offset - inStart + 1, preEnd,
+                inOrder, offset + 1, inEnd);
+
+        return node;
+    }
+
     @Override
     public void traverse(Visitor<E> visitor) {
         if (root == null) {
