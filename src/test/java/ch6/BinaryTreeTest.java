@@ -439,7 +439,6 @@ public class BinaryTreeTest {
         Integer[] values = getBinaryTreeValues();
         BinaryTree<Integer> binaryTree = BinaryTree.of(values);
 
-        final int nodesInTree = filterNullValues(values).length;
         final int sum = 14;
         final AtomicBoolean result = new AtomicBoolean();
 
