@@ -553,6 +553,48 @@ public class BinaryTreeTest {
         assertArrayEquals(inOrder, inOrderCollector.getArray());
     }
 
+    // 6.4.33
+    // Find the lowest common ancestor of two nodes in binary tree
+    @Test
+    public void findLowestCommonAncestor() {
+        Integer[] values = getBinaryTreeValues();
+        BinaryTree<Integer> binaryTree = BinaryTree.of(values);
+
+        final AtomicInteger result = new AtomicInteger();
+
+        Visitor<Integer> visitor = new Visitor<Integer>() {
+            @Override
+            public void visit(BinaryTree.Node<Integer> root) {
+                BinaryTree.Node<Integer> lca = findLowestCommonAncestor(root, 6, 5);
+                result.set(lca.item);
+            }
+
+            private BinaryTree.Node<Integer> findLowestCommonAncestor(BinaryTree.Node<Integer> node,
+                                                                      Integer item1, Integer item2) {
+                if (node == null) {
+                    return null;
+                }
+
+                if (node.item.equals(item1) || node.item.equals(item2)) {
+                    return node;
+                }
+
+                BinaryTree.Node<Integer> leftLca = findLowestCommonAncestor(node.left, item1, item2);
+                BinaryTree.Node<Integer> rightLca = findLowestCommonAncestor(node.right, item1, item2);
+
+                if (leftLca != null && rightLca != null) {
+                    return node;
+                }
+
+                return leftLca != null ? leftLca : rightLca;
+            }
+        };
+
+        binaryTree.traverse(visitor);
+
+        assertEquals(3, result.get());
+    }
+
     private <E> void testBinaryTreeAdt(BinaryTree<E> binaryTree, int capacity) {
         NodeCollectorVisitorAction<E> preOrderCollector = new NodeCollectorVisitorAction<>(capacity);
         binaryTree.traverse(new PreOrderNodeVisitor<>(preOrderCollector));
