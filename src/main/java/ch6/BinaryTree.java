@@ -45,18 +45,29 @@ public class BinaryTree<E> implements Traversable<E> {
         return new BinaryTree<>(rootNode);
     }
 
-    public static <E> BinaryTree<E> of(E[] inOrder, E[] preOrder) {
+    public static <E> BinaryTree<E> ofPreInTraversals(E[] preOrder, E[] inOrder) {
         if (inOrder.length == 0 || inOrder.length != preOrder.length) {
             return new BinaryTree<>();
         }
 
-        Node<E> rootNode = createNode(preOrder, 0, preOrder.length - 1,
+        Node<E> rootNode = createPreInNode(preOrder, 0, preOrder.length - 1,
                 inOrder, 0, inOrder.length - 1);
 
         return new BinaryTree<>(rootNode);
     }
 
-    private static <E> Node<E> createNode(E[] preOrder, int preStart, int preEnd, E[] inOrder, int inStart, int inEnd) {
+    public static <E> BinaryTree<E> ofPostInTraversals(E[] postOrder, E[] inOrder) {
+        if (inOrder.length == 0 || inOrder.length != postOrder.length) {
+            return new BinaryTree<>();
+        }
+
+        Node<E> rootNode = createPostInNode(postOrder, 0,postOrder.length - 1,
+                inOrder, 0, inOrder.length - 1);
+
+        return new BinaryTree<>(rootNode);
+    }
+
+    private static <E> Node<E> createPreInNode(E[] preOrder, int preStart, int preEnd, E[] inOrder, int inStart, int inEnd) {
         if (preStart > preEnd || inStart > inEnd) {
             return null;
         }
@@ -71,9 +82,36 @@ public class BinaryTree<E> implements Traversable<E> {
             }
         }
 
-        node.left = createNode(preOrder, preStart + 1, preStart + offset - inStart,
+        node.left = createPreInNode(preOrder, preStart + 1, preStart + offset - inStart,
                 inOrder, inStart, offset - 1);
-        node.right = createNode(preOrder, preStart + offset - inStart + 1, preEnd,
+        node.right = createPreInNode(preOrder, preStart + offset - inStart + 1, preEnd,
+                inOrder, offset + 1, inEnd);
+
+        return node;
+    }
+
+    private static <E> Node<E> createPostInNode(E[] postOrder, int postStart, int postEnd, E[] inOrder, int inStart, int inEnd) {
+        if (inStart > inEnd) {
+            return null;
+        }
+
+        E item = postOrder[postEnd];
+        Node<E> node = new Node<>(item);
+
+        if (inStart == inEnd) {
+            return node;
+        }
+
+        int offset = inStart;
+        for (; offset < inEnd; offset++) {
+            if (inOrder[offset] == item) {
+                break;
+            }
+        }
+
+        node.left = createPostInNode(postOrder, postStart, postStart - inStart + offset - 1,
+                inOrder, inStart, offset - 1);
+        node.right = createPostInNode(postOrder, postEnd - inEnd + offset, postEnd - 1,
                 inOrder, offset + 1, inEnd);
 
         return node;
