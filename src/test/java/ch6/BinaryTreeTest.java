@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.Assert.assertArrayEquals;
@@ -417,10 +418,6 @@ public class BinaryTreeTest {
                     findPaths(node.right, depth);
                 }
             }
-
-            private boolean isLeaf(BinaryTree.Node<Integer> node) {
-                return node.left == null && node.right == null;
-            }
         };
 
         binaryTree.traverse(visitor);
@@ -433,6 +430,46 @@ public class BinaryTreeTest {
 
         Integer[] path3 = paths.removeFirst();
         assertArrayEquals(new Integer[] { 1, 3, 5 }, path3);
+    }
+
+    // 6.4.24
+    // Check whether there's a path in binary tree with the given sum
+    @Test
+    public void checkExistenceOfPathWithGivenSum() {
+        Integer[] values = getBinaryTreeValues();
+        BinaryTree<Integer> binaryTree = BinaryTree.of(values);
+
+        final int nodesInTree = filterNullValues(values).length;
+        final int sum = 14;
+        final AtomicBoolean result = new AtomicBoolean();
+
+        Visitor<Integer> visitor = new Visitor<Integer>() {
+            @Override
+            public void visit(BinaryTree.Node<Integer> root) {
+                if (root == null) {
+                    return;
+                }
+
+                result.set(hasPath(root, sum));
+            }
+
+            private boolean hasPath(BinaryTree.Node<Integer> node, int sum) {
+                if (node == null) {
+                    return false;
+                }
+
+                if (isLeaf(node) && node.item == sum) {
+                    return true;
+                }
+
+                int remainder = sum - node.item;
+                return hasPath(node.left, remainder) || hasPath(node.right, remainder);
+            }
+        };
+
+        binaryTree.traverse(visitor);
+
+        assertTrue(result.get());
     }
 
     private <E> void testBinaryTreeAdt(BinaryTree<E> binaryTree, int capacity) {
@@ -483,5 +520,9 @@ public class BinaryTreeTest {
         }
 
         return structurallyIdentical(root1.left, root2.left) && structurallyIdentical(root1.right, root2.right);
+    }
+
+    private boolean isLeaf(BinaryTree.Node<Integer> node) {
+        return node.left == null && node.right == null;
     }
 }
