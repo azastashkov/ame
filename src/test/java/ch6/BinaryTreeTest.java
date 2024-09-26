@@ -14,6 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 public class BinaryTreeTest {
@@ -469,6 +470,48 @@ public class BinaryTreeTest {
         binaryTree.traverse(visitor);
 
         assertTrue(result.get());
+    }
+
+    // 6.4.27
+    // Convert a binary tree to its mirror
+    //        1                1
+    //       / \              / \
+    //      2   3            3   2
+    //         / \    ->    / \
+    //        4   5        5   4
+    //         \              /
+    //          6            6
+    @Test
+    public void convertBinaryTreeToItsMirror() {
+        Integer[] values = getBinaryTreeValues();
+        BinaryTree<Integer> binaryTree = BinaryTree.of(values);
+
+        final int expectedSize = filterNullValues(values).length;
+
+        binaryTree.traverse(root -> {
+            Stack<BinaryTree.Node<Integer>> stack = new FixedSizeArrayStack<>(expectedSize);
+            stack.push(root);
+
+            while (!stack.isEmpty()) {
+                BinaryTree.Node<Integer> node = stack.pop();
+
+                if (node.left != null) {
+                    stack.push(node.left);
+                }
+
+                if (node.right != null) {
+                    stack.push(node.right);
+                }
+
+                BinaryTree.Node<Integer> tmp = node.left;
+                node.left = node.right;
+                node.right = tmp;
+            }
+        });
+
+        NodeCollectorVisitorAction<Integer> preOrderCollector = new NodeCollectorVisitorAction<>(expectedSize);
+        binaryTree.traverse(new PreOrderNodeVisitor<>(preOrderCollector));
+        assertArrayEquals(new Integer[] { 1, 3, 5, 4, 6, 2 }, preOrderCollector.getArray());
     }
 
     private <E> void testBinaryTreeAdt(BinaryTree<E> binaryTree, int capacity) {
