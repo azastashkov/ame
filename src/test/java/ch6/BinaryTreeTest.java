@@ -1,5 +1,6 @@
 package ch6;
 
+import ch3.LinkedList;
 import ch4.FixedSizeArrayStack;
 import ch4.Stack;
 import ch5.FixedSizeCircularArrayQueue;
@@ -382,6 +383,58 @@ public class BinaryTreeTest {
         assertEquals(expectedWidth, maxWidth.get());
     }
 
+    // 6.4.23
+    // Given a binary tree, find all its root-to-leaf paths
+    @Test
+    public void findAllRootToLeafPathsInBinaryTree() {
+        Integer[] values = getBinaryTreeValues();
+        BinaryTree<Integer> binaryTree = BinaryTree.of(values);
+
+        final int nodesInTree = filterNullValues(values).length;
+        final LinkedList<Integer[]> paths = new LinkedList<>();
+
+        Visitor<Integer> visitor = new Visitor<Integer>() {
+            private final Integer[] rootToNodePath = new Integer[nodesInTree];
+
+            @Override
+            public void visit(BinaryTree.Node<Integer> root) {
+                findPaths(root, 0);
+            }
+
+            private void findPaths(BinaryTree.Node<Integer> node, int depth) {
+                if (node == null) {
+                    return;
+                }
+
+                rootToNodePath[depth++] = node.item;
+
+                if (isLeaf(node)) {
+                    Integer[] path = new Integer[depth];
+                    System.arraycopy(rootToNodePath, 0, path, 0, depth);
+                    paths.add(path);
+                } else {
+                    findPaths(node.left, depth);
+                    findPaths(node.right, depth);
+                }
+            }
+
+            private boolean isLeaf(BinaryTree.Node<Integer> node) {
+                return node.left == null && node.right == null;
+            }
+        };
+
+        binaryTree.traverse(visitor);
+
+        Integer[] path1 = paths.removeFirst();
+        assertArrayEquals(new Integer[] { 1, 2 }, path1);
+
+        Integer[] path2 = paths.removeFirst();
+        assertArrayEquals(new Integer[] { 1, 3, 4, 6 }, path2);
+
+        Integer[] path3 = paths.removeFirst();
+        assertArrayEquals(new Integer[] { 1, 3, 5 }, path3);
+    }
+
     private <E> void testBinaryTreeAdt(BinaryTree<E> binaryTree, int capacity) {
         NodeCollectorVisitorAction<E> preOrderCollector = new NodeCollectorVisitorAction<>(capacity);
         binaryTree.traverse(new PreOrderNodeVisitor<>(preOrderCollector));
@@ -413,7 +466,7 @@ public class BinaryTreeTest {
         //     2     3
         //    / \   / \
         //   4   5 6   7
-        return new Integer[]{1, 2, 3, 4, 5, 6, 7};
+        return new Integer[ ]{ 1, 2, 3, 4, 5, 6, 7 };
     }
 
     private Integer[] filterNullValues(Integer[] values) {
