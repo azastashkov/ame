@@ -14,6 +14,28 @@ public class BinarySearchTreeTest {
         testBinarySearchTreeAdt(binarySearchTree, values.length);
     }
 
+    // 6.4.55
+    // Given pointers to two nodes in a binary search tree, find the lowest common ancestor (LCA).
+    // Assume that both values already exist in the tree.
+    // LCA in BST: a < lca.item < b
+    @Test
+    public void findLowestCommonAncestor() {
+        Integer[] values = getBinarySearchTreeValues();
+        BinarySearchTree<Integer> binarySearchTree = BinarySearchTree.of(values);
+
+        BstLcaVisitorAction<Integer> bstLcaVisitorAction1 = new BstLcaVisitorAction<>(2, 6);
+        binarySearchTree.traverse(new PreOrderNodeVisitor<>(bstLcaVisitorAction1));
+        assertEquals(4, (int) bstLcaVisitorAction1.getLca());
+
+        BstLcaVisitorAction<Integer> bstLcaVisitorAction2 = new BstLcaVisitorAction<>(5, 7);
+        binarySearchTree.traverse(new PreOrderNodeVisitor<>(bstLcaVisitorAction2));
+        assertEquals(6, (int) bstLcaVisitorAction2.getLca());
+
+        BstLcaVisitorAction<Integer> bstLcaVisitorAction3 = new BstLcaVisitorAction<>(1, 6);
+        binarySearchTree.traverse(new PreOrderNodeVisitor<>(bstLcaVisitorAction3));
+        assertEquals(4, (int) bstLcaVisitorAction3.getLca());
+    }
+
     private void testBinarySearchTreeAdt(BinarySearchTree<Integer> binarySearchTree, int capacity) {
         NodeCollectorVisitorAction<Integer> preOrderCollector = new NodeCollectorVisitorAction<>(capacity);
         binarySearchTree.traverse(new PreOrderNodeVisitor<>(preOrderCollector));
