@@ -1,6 +1,9 @@
 package ch6;
 
+import ch3.LinkedList;
 import org.junit.Test;
+
+import java.util.Arrays;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -42,6 +45,23 @@ public class BinarySearchTreeTest {
     public void checkWhetherBinaryTreeIsBST() {
         Integer[] values = getBinarySearchTreeValues();
         BinarySearchTree<Integer> binarySearchTree = BinarySearchTree.of(values);
+
+        NodeCollectorVisitorAction<Integer> inOrderCollector = new NodeCollectorVisitorAction<>(values.length);
+        binarySearchTree.traverse(new InOrderNodeVisitor<>(inOrderCollector));
+        assertArrayEquals(new Integer[] { 1, 2, 3, 4, 5, 6, 7 }, inOrderCollector.getArray());
+    }
+
+    // 6.9.61
+    // Convert a sorted linked list to balanced binary search tree
+    @Test
+    public void convertSortedLinkedListToBalancedBinarySearchTree() {
+        Integer[] values = getBinarySearchTreeValues();
+        Arrays.sort(values);
+
+        LinkedList<Integer> list = new LinkedList<>();
+        Arrays.stream(values).forEach(list::add);
+
+        BinarySearchTree<Integer> binarySearchTree = BinarySearchTree.of(list);
 
         NodeCollectorVisitorAction<Integer> inOrderCollector = new NodeCollectorVisitorAction<>(values.length);
         binarySearchTree.traverse(new InOrderNodeVisitor<>(inOrderCollector));

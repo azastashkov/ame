@@ -1,5 +1,7 @@
 package ch6;
 
+import ch3.LinkedList;
+
 import java.util.Arrays;
 
 public class BinarySearchTree<E extends Comparable<E>> extends AbstractBinaryTree<E> {
@@ -16,6 +18,11 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractBinaryTre
         Arrays.stream(values).forEach(binarySearchTree::add);
 
         return binarySearchTree;
+    }
+
+    public static <E extends Comparable<E>> BinarySearchTree<E> of(LinkedList<E> list) {
+        Node<E> root = construct(list, 0, list.size() - 1);
+        return new BinarySearchTree<>(root);
     }
 
     public boolean contains(E item) {
@@ -124,6 +131,21 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractBinaryTre
                 }
             }
         }
+
+        return root;
+    }
+
+    private static <E extends Comparable<E>> Node<E> construct(LinkedList<E> list, int start, int end) {
+        if (start > end) {
+            return null;
+        }
+
+        int mid = (start + end) / 2;
+
+        Node<E> left = construct(list, start, mid - 1);
+        Node<E> root = new Node<>(list.get(mid));
+        root.left = left;
+        root.right = construct(list, mid + 1, end);
 
         return root;
     }
