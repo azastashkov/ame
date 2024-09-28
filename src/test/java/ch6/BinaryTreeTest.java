@@ -649,6 +649,62 @@ public class BinaryTreeTest {
         assertArrayEquals(new Integer[] { 1, 3, 2, 4, 5, 6 }, result);
     }
 
+    // 6.4.39
+    // Given a binary tree with three pointers (left, right, nextSibling), implement an algorithm
+    // for filling the nextSibling pointers assuming they are null initially
+    @Test
+    public void fillNextSiblingPointersInBinaryTree() {
+        Integer[] values = getFullBinaryTreeValues();
+        BinaryTree<Integer> binaryTree = BinaryTree.of(values);
+
+        final int treeSize = filterNullValues(values).length;
+        final StringBuilder sb = new StringBuilder();
+
+        binaryTree.traverse(root -> {
+            if (root == null) {
+                return;
+            }
+
+            Queue<BinaryTree.Node<Integer>> queue = new FixedSizeCircularArrayQueue<>(treeSize);
+            queue.enqueue(root);
+
+            while (!queue.isEmpty()) {
+                int size = queue.size();
+                BinaryTree.Node<Integer> previous = null;
+
+                while (size-- > 0) {
+                    BinaryTree.Node<Integer> node = queue.dequeue();
+
+                    if (previous == null) {
+                        sb.append(node.item).append(", ");
+                        previous = node;
+                    } else {
+                        sb.setLength(sb.length() - 3);
+                        sb.append(previous.item).append("->").append(node.item).append(", ");
+                        sb.append(node.item).append(", ");
+
+                        previous.nextSibling = node;
+                        previous = node;
+                    }
+
+                    if (node.left != null) {
+                        queue.enqueue(node.left);
+                    }
+
+                    if (node.right != null) {
+                        queue.enqueue(node.right);
+                    }
+                }
+            }
+        });
+
+        if (sb.length() > 2) {
+            sb.setLength(sb.length() - 2);
+        }
+
+        assertEquals("1, 2->3, 3, 4->5, 5->6, 6->7, 7", sb.toString());
+    }
+
     private <E> void testBinaryTreeAdt(BinaryTree<E> binaryTree, int capacity) {
         NodeCollectorVisitorAction<E> preOrderCollector = new NodeCollectorVisitorAction<>(capacity);
         binaryTree.traverse(new PreOrderNodeVisitor<>(preOrderCollector));
