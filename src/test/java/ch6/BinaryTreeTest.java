@@ -594,6 +594,61 @@ public class BinaryTreeTest {
         assertEquals(3, result.get());
     }
 
+    // 6.4.34
+    // Traverse a binary tree in zigzag order
+    @Test
+    public void traverseBinaryTreeInZigZagOrder() {
+        Integer[] values = getBinaryTreeValues();
+        BinaryTree<Integer> binaryTree = BinaryTree.of(values);
+
+        final int treeSize = filterNullValues(values).length;
+        final Integer[] result = new Integer[treeSize];
+
+        binaryTree.traverse(root -> {
+            if (root == null) {
+                return;
+            }
+
+            Deque<BinaryTree.Node<Integer>> deque = new LinkedListDeque<>(treeSize);
+            deque.addFirst(root);
+
+            int i = 0;
+            boolean leftToRight = true;
+
+            while (!deque.isEmpty()) {
+                int size = deque.size();
+
+                while (size-- > 0) {
+                    BinaryTree.Node<Integer> node = leftToRight ? deque.removeFirst() : deque.removeLast();
+
+                    result[i++] = node.item;
+
+                    if (leftToRight) {
+                        if (node.left != null) {
+                            deque.addLast(node.left);
+                        }
+
+                        if (node.right != null) {
+                            deque.addLast(node.right);
+                        }
+                    } else {
+                        if (node.right != null) {
+                            deque.addFirst(node.right);
+                        }
+
+                        if (node.left != null) {
+                            deque.addFirst(node.left);
+                        }
+                    }
+                }
+
+                leftToRight = !leftToRight;
+            }
+        });
+
+        assertArrayEquals(new Integer[] { 1, 3, 2, 4, 5, 6 }, result);
+    }
+
     private <E> void testBinaryTreeAdt(BinaryTree<E> binaryTree, int capacity) {
         NodeCollectorVisitorAction<E> preOrderCollector = new NodeCollectorVisitorAction<>(capacity);
         binaryTree.traverse(new PreOrderNodeVisitor<>(preOrderCollector));

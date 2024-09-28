@@ -30,7 +30,7 @@ public class LinkedListDeque<E> extends AbstractDeque<E> {
             tail = head;
         } else {
             tail.next = new Node<>(element);
-            tail.previous = tail;
+            tail.next.previous = tail;
             tail = tail.next;
         }
 
