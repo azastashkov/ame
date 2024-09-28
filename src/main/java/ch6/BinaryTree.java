@@ -3,9 +3,7 @@ package ch6;
 import ch5.FixedSizeCircularArrayQueue;
 import ch5.Queue;
 
-public class BinaryTree<E> implements Traversable<E> {
-    private Node<E> root;
-
+public class BinaryTree<E> extends AbstractBinaryTree<E> {
     private BinaryTree() {
     }
 
@@ -115,34 +113,5 @@ public class BinaryTree<E> implements Traversable<E> {
                 inOrder, offset + 1, inEnd);
 
         return node;
-    }
-
-    @Override
-    public void traverse(Visitor<E> visitor) {
-        if (root == null) {
-            throw new IllegalStateException("Cannot traverse an empty tree");
-        }
-
-        root.traverse(visitor);
-    }
-
-    public Node<E> getRoot() {
-        return root;
-    }
-
-    public static class Node<E> implements Traversable<E> {
-        public E item;
-        public Node<E> left;
-        public Node<E> right;
-        public Node<E> nextSibling;
-
-        public Node(E item) {
-            this.item = item;
-        }
-
-        @Override
-        public void traverse(Visitor<E> visitor) {
-            visitor.visit(this);
-        }
     }
 }
