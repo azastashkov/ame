@@ -2,6 +2,8 @@ package ch6;
 
 import org.junit.Test;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -34,6 +36,18 @@ public class BinarySearchTreeTest {
         BstLcaVisitorAction<Integer> bstLcaVisitorAction3 = new BstLcaVisitorAction<>(1, 6);
         binarySearchTree.traverse(new PreOrderNodeVisitor<>(bstLcaVisitorAction3));
         assertEquals(4, (int) bstLcaVisitorAction3.getLca());
+    }
+
+    // 6.4.57
+    // Give an algorithm to check whether the given binary tree is a BST or not
+    @Test
+    public void checkWhetherBinaryTreeIsBST() {
+        Integer[] values = getBinarySearchTreeValues();
+        BinarySearchTree<Integer> binarySearchTree = BinarySearchTree.of(values);
+
+        NodeCollectorVisitorAction<Integer> inOrderCollector = new NodeCollectorVisitorAction<>(values.length);
+        binarySearchTree.traverse(new InOrderNodeVisitor<>(inOrderCollector));
+        assertArrayEquals(new Integer[] { 1, 2, 3, 4, 5, 6, 7 }, inOrderCollector.getArray());
     }
 
     private void testBinarySearchTreeAdt(BinarySearchTree<Integer> binarySearchTree, int capacity) {
