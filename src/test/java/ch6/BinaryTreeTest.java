@@ -83,7 +83,7 @@ public class BinaryTreeTest {
         final int initialItemsCount = filterNullValues(values).length;
 
         binaryTree.traverse(root -> {
-            Queue<BinaryTree.Node<Integer>> queue = new FixedSizeCircularArrayQueue(initialItemsCount);
+            Queue<BinaryTree.Node<Integer>> queue = new FixedSizeCircularArrayQueue<>(initialItemsCount);
             queue.enqueue(root);
 
             while (!queue.isEmpty()) {
