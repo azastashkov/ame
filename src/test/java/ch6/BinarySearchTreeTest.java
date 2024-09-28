@@ -2,8 +2,6 @@ package ch6;
 
 import org.junit.Test;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -16,7 +14,7 @@ public class BinarySearchTreeTest {
         testBinarySearchTreeAdt(binarySearchTree, values.length);
     }
 
-    // 6.4.55
+    // 6.9.55
     // Given pointers to two nodes in a binary search tree, find the lowest common ancestor (LCA).
     // Assume that both values already exist in the tree.
     // LCA in BST: a < lca.item < b
@@ -38,7 +36,7 @@ public class BinarySearchTreeTest {
         assertEquals(4, (int) bstLcaVisitorAction3.getLca());
     }
 
-    // 6.4.57
+    // 6.9.57
     // Give an algorithm to check whether the given binary tree is a BST or not
     @Test
     public void checkWhetherBinaryTreeIsBST() {
