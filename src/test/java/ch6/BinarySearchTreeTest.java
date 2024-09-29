@@ -68,6 +68,21 @@ public class BinarySearchTreeTest {
         assertArrayEquals(new Integer[] { 1, 2, 3, 4, 5, 6, 7 }, inOrderCollector.getArray());
     }
 
+    // 6.9.65
+    // Find the kth smallest element in binary search tree
+    @Test
+    public void findKthSmallestElementInBinarySearchTree() {
+        Integer[] values = getBinarySearchTreeValues();
+        BinarySearchTree<Integer> binarySearchTree = BinarySearchTree.of(values);
+
+        NodeCollectorVisitorAction<Integer> inOrderCollector = new NodeCollectorVisitorAction<>(values.length);
+        binarySearchTree.traverse(new InOrderNodeVisitor<>(inOrderCollector));
+
+        final int k = 4;
+        Object[] array = inOrderCollector.getArray();
+        assertEquals(4, (int) array[k - 1]);
+    }
+
     private void testBinarySearchTreeAdt(BinarySearchTree<Integer> binarySearchTree, int capacity) {
         NodeCollectorVisitorAction<Integer> preOrderCollector = new NodeCollectorVisitorAction<>(capacity);
         binarySearchTree.traverse(new PreOrderNodeVisitor<>(preOrderCollector));
