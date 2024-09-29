@@ -12,7 +12,7 @@ import static org.junit.Assert.assertTrue;
 public class BinarySearchTreeTest {
     @Test
     public void testBinarySearchTree() {
-        Integer[] values = getBinarySearchTreeValues();
+        Integer[] values = getFullBinarySearchTreeValues();
         BinarySearchTree<Integer> binarySearchTree = BinarySearchTree.of(values);
         testBinarySearchTreeAdt(binarySearchTree, values.length);
     }
@@ -23,7 +23,7 @@ public class BinarySearchTreeTest {
     // LCA in BST: a < lca.item < b
     @Test
     public void findLowestCommonAncestor() {
-        Integer[] values = getBinarySearchTreeValues();
+        Integer[] values = getFullBinarySearchTreeValues();
         BinarySearchTree<Integer> binarySearchTree = BinarySearchTree.of(values);
 
         BstLcaVisitorAction<Integer> bstLcaVisitorAction1 = new BstLcaVisitorAction<>(2, 6);
@@ -43,7 +43,7 @@ public class BinarySearchTreeTest {
     // Give an algorithm to check whether the given binary tree is a BST or not
     @Test
     public void checkWhetherBinaryTreeIsBST() {
-        Integer[] values = getBinarySearchTreeValues();
+        Integer[] values = getFullBinarySearchTreeValues();
         BinarySearchTree<Integer> binarySearchTree = BinarySearchTree.of(values);
 
         NodeCollectorVisitorAction<Integer> inOrderCollector = new NodeCollectorVisitorAction<>(values.length);
@@ -55,7 +55,7 @@ public class BinarySearchTreeTest {
     // Convert a sorted linked list to balanced binary search tree
     @Test
     public void convertSortedLinkedListToBalancedBinarySearchTree() {
-        Integer[] values = getBinarySearchTreeValues();
+        Integer[] values = getFullBinarySearchTreeValues();
         Arrays.sort(values);
 
         LinkedList<Integer> list = new LinkedList<>();
@@ -72,7 +72,7 @@ public class BinarySearchTreeTest {
     // Find the kth smallest element in binary search tree
     @Test
     public void findKthSmallestElementInBinarySearchTree() {
-        Integer[] values = getBinarySearchTreeValues();
+        Integer[] values = getFullBinarySearchTreeValues();
         BinarySearchTree<Integer> binarySearchTree = BinarySearchTree.of(values);
 
         NodeCollectorVisitorAction<Integer> inOrderCollector = new NodeCollectorVisitorAction<>(values.length);
@@ -81,6 +81,21 @@ public class BinarySearchTreeTest {
         final int k = 4;
         Object[] array = inOrderCollector.getArray();
         assertEquals(4, (int) array[k - 1]);
+    }
+
+    // 6.9.66
+    // Floor and ceiling in binary search tree
+    @Test
+    public void findFloorAndCeilingInBinarySearchTree() {
+        Integer[] values = getBinarySearchTreeValues();
+        BinarySearchTree<Integer> binarySearchTree = BinarySearchTree.of(values);
+
+        NodeCollectorVisitorAction<Integer> inOrderCollector = new NodeCollectorVisitorAction<>(values.length);
+        binarySearchTree.traverse(new InOrderNodeVisitor<>(inOrderCollector));
+        assertArrayEquals(new Integer[] { 1, 2, 3, 6, 10 }, inOrderCollector.getArray());
+
+        assertEquals(3, (int) binarySearchTree.floor(5));
+        assertEquals(6, (int) binarySearchTree.ceiling(5));
     }
 
     private void testBinarySearchTreeAdt(BinarySearchTree<Integer> binarySearchTree, int capacity) {
@@ -109,6 +124,15 @@ public class BinarySearchTreeTest {
     }
 
     private Integer[] getBinarySearchTreeValues() {
+        //        2
+        //      /   \
+        //     1     6
+        //          / \
+        //         3   10
+        return new Integer[] { 2, 1, 6, 3, 10 };
+    }
+
+    private Integer[] getFullBinarySearchTreeValues() {
         //        4
         //      /   \
         //     2     6

@@ -57,6 +57,50 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractBinaryTre
         root = delete(root, item);
     }
 
+    public E floor(E item) {
+        return floor(root, item);
+    }
+
+    public E ceiling(E item) {
+        return ceiling(root, item);
+    }
+
+    private E floor(Node<E> root, E item) {
+        if (root == null) {
+            return null;
+        }
+
+        if (root.item.equals(item)) {
+            return root.item;
+        }
+
+        if (root.item.compareTo(item) > 0) {
+            return floor(root.left, item);
+        }
+
+        E floor = floor(root.right, item);
+
+        return floor == null ? root.item : floor.compareTo(item) <= 0 ? floor : root.item;
+    }
+
+    private E ceiling(Node<E> root, E item) {
+        if (root == null) {
+            return null;
+        }
+
+        if (root.item.equals(item)) {
+            return root.item;
+        }
+
+        if (root.item.compareTo(item) < 0) {
+            return ceiling(root.right, item);
+        }
+
+        E ceiling = ceiling(root.left, item);
+
+        return ceiling == null ? root.item : ceiling.compareTo(item) >= 0 ? ceiling : root.item;
+    }
+
     private AbstractBinaryTree.Node<E> find(AbstractBinaryTree.Node<E> root, E item) {
         if (root == null) {
             return null;
