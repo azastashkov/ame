@@ -22,7 +22,7 @@ public abstract class AbstractStack<E> implements Stack<E> {
     }
 
     @Override
-    public E peek() {
+    public E top() {
         checkLowerBound();
         return doPeek();
     }

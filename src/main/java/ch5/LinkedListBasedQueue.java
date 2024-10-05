@@ -19,6 +19,7 @@ public class LinkedListBasedQueue<E> extends AbstractQueue<E> {
             tail.next = new Node<>(element);
             tail = tail.next;
         }
+
         size++;
     }
 
@@ -26,9 +27,20 @@ public class LinkedListBasedQueue<E> extends AbstractQueue<E> {
     protected E doDequeue() {
         E element = head.item;
         head = head.next;
+
         if (size-- == 0) {
             tail = null;
         }
+
         return element;
+    }
+
+    @Override
+    public E peek() {
+        if (head == null) {
+            return null;
+        }
+
+        return head.item;
     }
 }

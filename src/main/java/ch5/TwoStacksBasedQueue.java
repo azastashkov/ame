@@ -14,6 +14,17 @@ public class TwoStacksBasedQueue<E> extends AbstractQueue<E> {
     }
 
     @Override
+    public E peek() {
+        if (stack2.isEmpty()) {
+            while (!stack1.isEmpty()) {
+                stack2.push(stack1.pop());
+            }
+        }
+
+        return stack2.top();
+    }
+
+    @Override
     protected void doEnqueue(E element) {
         stack1.push(element);
         size++;
@@ -26,8 +37,10 @@ public class TwoStacksBasedQueue<E> extends AbstractQueue<E> {
                 stack2.push(stack1.pop());
             }
         }
+
         E element = stack2.pop();
         size--;
+
         return element;
     }
 }

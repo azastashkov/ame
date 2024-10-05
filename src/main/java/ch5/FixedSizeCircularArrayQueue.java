@@ -12,6 +12,11 @@ public class FixedSizeCircularArrayQueue<E> extends AbstractQueue<E> {
     }
 
     @Override
+    public E peek() {
+        return array[headIndex];
+    }
+
+    @Override
     protected void doEnqueue(E element) {
         array[tailIndex] = element;
         tailIndex = (tailIndex + 1) % array.length;
@@ -23,6 +28,7 @@ public class FixedSizeCircularArrayQueue<E> extends AbstractQueue<E> {
         E element = array[headIndex];
         headIndex = (headIndex + 1) % array.length;
         size--;
+
         return element;
     }
 }

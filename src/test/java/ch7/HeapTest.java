@@ -2,6 +2,7 @@ package ch7;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 public class HeapTest {
@@ -73,5 +74,34 @@ public class HeapTest {
             assertEquals(i, (int) minHeap1.dequeue());
             assertEquals(j, (int) minHeap2.dequeue());
         }
+    }
+
+    // 7.7.28
+    // Maximum sum in sliding window
+    @Test
+    public void findMaximumSumInSlidingWindow() {
+        final int k = 3;
+        final Integer[] array = new Integer[] { 1, 3, -1, -3, 5, 3, 6, 7 };
+        final Integer[] result = new Integer[array.length - k + 1];
+
+        MaxHeap<IndexedValue<Integer>> maxHeap = new MaxHeap<>(array.length);
+
+        for (int i = 0; i < k; i++) {
+            maxHeap.enqueue(new IndexedValue<>(array[i], i));
+        }
+
+        result[0] = maxHeap.peek().getValue();
+
+        for (int i = k; i < array.length; i++) {
+            maxHeap.enqueue(new IndexedValue<>(array[i], i));
+
+            while (maxHeap.peek().getIndex() <= i - k) {
+                maxHeap.dequeue();
+            }
+
+            result[i - k + 1] = maxHeap.peek().getValue();
+        }
+
+        assertArrayEquals(new Integer[] {3, 3, 5, 5, 6, 7 }, result);
     }
 }

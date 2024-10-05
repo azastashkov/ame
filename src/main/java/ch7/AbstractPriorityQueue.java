@@ -33,9 +33,14 @@ public class AbstractPriorityQueue<E> extends AbstractQueue<E> {
     }
 
     @Override
+    public E peek() {
+        return array[1];
+    }
+
+    @Override
     protected void doEnqueue(E element) {
         array[++size] = element;
-        swim(size - 1);
+        swim(size);
 
         assert isMaxHeap();
     }

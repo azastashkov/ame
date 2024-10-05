@@ -50,7 +50,7 @@ public class QueueTest {
     // Implement a queue using two stacks
     @Test
     public void testTwoStacksBasedQueue() {
-        testQueueAdt(new LinkedListBasedQueue<>(4));
+        testQueueAdt(new TwoStacksBasedQueue<>(4));
     }
 
     // 5.7.5
@@ -143,6 +143,7 @@ public class QueueTest {
             queue.enqueue(i);
         }
 
+        assertEquals(1, (int) queue.peek());
         assertEquals(4, queue.size());
 
         for (int i = 1; i <= 4; i++) {

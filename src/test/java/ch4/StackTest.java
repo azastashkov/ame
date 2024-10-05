@@ -148,6 +148,7 @@ public class StackTest {
             stack.push(i);
         }
 
+        assertEquals(4, (int) stack.top());
         assertEquals(4, stack.size());
 
         for (int i = 4; i >= 1; i--) {
@@ -208,12 +209,12 @@ public class StackTest {
             } else if (c == '(') {
                 stack.push(c);
             } else if (c == ')') {
-                while (!stack.isEmpty() && stack.peek() != '(') {
+                while (!stack.isEmpty() && stack.top() != '(') {
                     postfix.append(stack.pop());
                 }
                 stack.pop(); // '('
             } else { // operator
-                while (!stack.isEmpty() && precedence(c) <= precedence(stack.peek())) {
+                while (!stack.isEmpty() && precedence(c) <= precedence(stack.top())) {
                     postfix.append(stack.pop());
                 }
                 stack.push(c);
@@ -267,12 +268,12 @@ public class StackTest {
             } else if (c == '(') {
                 operators.push(c);
             } else if (c == ')') {
-                while (!operators.isEmpty() && operators.peek() != '(') {
+                while (!operators.isEmpty() && operators.top() != '(') {
                     operands.push(evaluate(operators.pop(), operands.pop(), operands.pop()));
                 }
                 operators.pop();
             } else {
-                while (!operators.isEmpty() && precedence(c) <= precedence(operators.peek())) {
+                while (!operators.isEmpty() && precedence(c) <= precedence(operators.top())) {
                     operands.push(evaluate(operators.pop(), operands.pop(), operands.pop()));
                 }
                 operators.push(c);
@@ -334,13 +335,13 @@ public class StackTest {
         int[] spans = new int[array.length];
 
         for (int i = 0; i < array.length; i++) {
-            while (!stack.isEmpty() && array[stack.peek()] <= array[i]) {
+            while (!stack.isEmpty() && array[stack.top()] <= array[i]) {
                 stack.pop();
             }
 
             int p = -1;
             if (!stack.isEmpty()) {
-                p = stack.peek();
+                p = stack.top();
             }
 
             spans[i] = i - p;
@@ -358,7 +359,7 @@ public class StackTest {
 
         Stack<Integer> stack = new LinkedListBasedStack<>(n);
         for (int i = 0; i < n; i++) {
-            while (!stack.isEmpty() && histogram[i] < histogram[stack.peek()]) {
+            while (!stack.isEmpty() && histogram[i] < histogram[stack.top()]) {
                 nextSmaller[stack.pop()] = i;
             }
             stack.push(i);
@@ -375,7 +376,7 @@ public class StackTest {
 
         Stack<Integer> stack = new LinkedListBasedStack<>(n);
         for (int i = n - 1; i >= 0; i--) {
-            while (!stack.isEmpty() && histogram[i] < histogram[stack.peek()]) {
+            while (!stack.isEmpty() && histogram[i] < histogram[stack.top()]) {
                 previousSmaller[stack.pop()] = i;
             }
             stack.push(i);
@@ -402,7 +403,7 @@ public class StackTest {
         Stack<Integer> ascending = new LinkedListBasedStack<>(input.size());
         while (!input.isEmpty()) {
             Integer tmp = input.pop();
-            while (!ascending.isEmpty() && tmp > ascending.peek()) {
+            while (!ascending.isEmpty() && tmp > ascending.top()) {
                 input.push(ascending.pop());
             }
             ascending.push(tmp);
