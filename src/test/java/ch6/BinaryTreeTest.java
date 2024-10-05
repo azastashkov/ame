@@ -543,8 +543,6 @@ public class BinaryTreeTest {
         NodeCollectorVisitorAction<Character> postOrderCollector = new NodeCollectorVisitorAction<>(postOrder.length);
         binaryTree.traverse(new PostOrderNodeVisitor<>(postOrderCollector));
 
-        System.out.println(Arrays.toString(postOrderCollector.getArray()));
-
         assertArrayEquals(postOrder, postOrderCollector.getArray());
 
         NodeCollectorVisitorAction<Character> inOrderCollector = new NodeCollectorVisitorAction<>(inOrder.length);
