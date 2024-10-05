@@ -1,6 +1,9 @@
 package ch7;
 
+import ch3.LinkedList;
 import org.junit.Test;
+
+import java.util.Arrays;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -103,5 +106,62 @@ public class HeapTest {
         }
 
         assertArrayEquals(new Integer[] {3, 3, 5, 5, 6, 7 }, result);
+    }
+
+    // 7.7.34
+    // Merge k sorted linked lists
+    @Test
+    public void mergeKSortedLinkedLists() {
+        LinkedList.Node<Integer> list1 = new LinkedList.Node<>(1);
+        list1.next = new LinkedList.Node<>(4);
+        list1.next.next = new LinkedList.Node<>(7);
+
+        LinkedList.Node<Integer> list2 = new LinkedList.Node<>(2);
+        list2.next = new LinkedList.Node<>(6);
+
+        LinkedList.Node<Integer> list3 = new LinkedList.Node<>(3);
+        list3.next = new LinkedList.Node<>(5);
+        list3.next.next = new LinkedList.Node<>(8);
+        list3.next.next.next = new LinkedList.Node<>(9);
+
+        @SuppressWarnings("unchecked")
+        LinkedList.Node<Integer>[] lists = new LinkedList.Node[] { list1, list2, list3 };
+
+        AbstractPriorityQueue<LinkedList.Node<Integer>> minHeap = new AbstractPriorityQueue<>(3,
+                (n1, n2) -> n2.item.compareTo(n1.item));
+
+        Arrays.stream(lists).forEach(minHeap::enqueue);
+
+        LinkedList.Node<Integer> head = null, tail = null;
+
+        int mergedListSize = 0;
+        while (!minHeap.isEmpty()) {
+            LinkedList.Node<Integer> current = minHeap.dequeue();
+
+            if (head == null) {
+                head = current;
+                tail = head;
+            } else {
+                tail.next = current;
+                tail = tail.next;
+            }
+
+            mergedListSize++;
+
+            if (current.next != null) {
+                minHeap.enqueue(current.next);
+            }
+        }
+
+        Integer[] result = new Integer[mergedListSize];
+
+        int i = 0;
+        LinkedList.Node<Integer> current = head;
+        while (current != null) {
+            result[i++] = current.item;
+            current = current.next;
+        }
+
+        assertArrayEquals(new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, result);
     }
 }
